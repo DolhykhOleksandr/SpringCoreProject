@@ -10,19 +10,15 @@ public interface OrderService {
 
     OrderDto getById(int id);
 
-    OrderDto addOrder(OrderDto orderDto);
+    OrderDto getByUsername(String username);
 
-    OrderDto removeOrder(int id);
+    OrderDto add(OrderDto order);
 
-    OrderDto updateOrder(OrderDto updatedOrderDto);
+    List<ProductDto> getAllProductsByOrderId(int orderId);
 
-    List<ProductDto> getAllByOrderId(int orderId);
+    List<ProductDto> getAllProductsByUsername(String username);
 
-    ProductDto addProduct(int orderId, ProductDto productDto);
+    ProductDto addProductToOrder(int orderId, ProductDto product);
 
-    ProductDto removeProduct(int orderID, int productId);
-
-    ProductDto updateProduct(int orderId, ProductDto newProductDto);
-
-    double calculateCost(OrderDto orderDto);
+    double calculateOrderCost(OrderDto order);
 }

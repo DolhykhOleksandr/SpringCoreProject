@@ -5,127 +5,90 @@ import com.example.springcoredemo.dto.OrderDto;
 import com.example.springcoredemo.dto.ProductDto;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDate;
-import java.util.ArrayList;
+
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.BeanPropertyRowMapper;
+import org.springframework.jdbc.core.JdbcTemplate;
+
+
 import java.util.List;
 
 @Service
 public class OrderServiceImpl implements OrderService {
-    private static List<OrderDto> orders = new ArrayList<>();
 
-    static {
-        orders.add(OrderDto.builder()
-                .id(1)
-                .date(LocalDate.of(2021, 3, 11))
-                .cost(0.0)
-                .products(new ArrayList<>())
-                .build());
-        orders.add(OrderDto.builder()
-                .id(2)
-                .date(LocalDate.of(2022, 10, 15))
-                .cost(0.0)
-                .products(new ArrayList<>())
-                .build());
-        orders.add(OrderDto.builder()
-                .id(3)
-                .date(LocalDate.of(2023, 6, 14))
-                .cost(0.0)
-                .products(new ArrayList<>())
-                .build());
+    private final JdbcTemplate jdbcTemplate;
+
+    @Autowired
+    public OrderServiceImpl(JdbcTemplate jdbcTemplate) {
+        this.jdbcTemplate = jdbcTemplate;
     }
 
     public List<OrderDto> getAll() {
+        List<OrderDto> orders = jdbcTemplate.query("SELECT * FROM Orders", new BeanPropertyRowMapper<>(OrderDto.class));
+        for (OrderDto order : orders) {
+            order.setProducts(getAllProductsByOrderId(order.getId()));
+        }
         return orders;
     }
 
     public OrderDto getById(int id) {
-        OrderDto result = null;
-        for (OrderDto order : orders) {
-            if (order.getId() == id) {
-                result = order;
-            }
+        OrderDto order = jdbcTemplate.queryForObject("SELECT * FROM Orders WHERE id=" + id,
+                new BeanPropertyRowMapper<>(OrderDto.class));
+        if (order != null) {
+            order.setProducts(getAllProductsByOrderId(id));
         }
-        return result;
-    }
-
-    public OrderDto addOrder(OrderDto order) {
-        int index = orders.size() + 1;
-        order.setId(index);
-        double sum = calculateCost(order);
-        order.setCost(sum);
-        orders.add(order);
         return order;
     }
 
-    public OrderDto removeOrder(int id) {
-        OrderDto order = getById(id);
-        orders.remove(order);
+    public OrderDto getByUsername(String username) {
+        OrderDto order = jdbcTemplate.queryForObject("SELECT * FROM Orders WHERE name='" + username + "'",
+                new BeanPropertyRowMapper<>(OrderDto.class));
+        if (order != null) {
+            order.setProducts(getAllProductsByOrderId(order.getId()));
+        }
         return order;
     }
 
-    public OrderDto updateOrder(OrderDto updatedOrder) {
-        for (OrderDto order : orders) {
-            if (order.getId() == updatedOrder.getId()) {
-                order.setDate(updatedOrder.getDate());
-                order.setCost(calculateCost(updatedOrder));
-                order.setProducts(updatedOrder.getProducts());
-            }
-        }
-        return updatedOrder;
+    public OrderDto add(OrderDto order) {
+        double cost = calculateOrderCost(order);
+        jdbcTemplate.update("INSERT INTO Orders VALUES (DEFAULT, ?, ?, ?)",
+                order.getName(), order.getDate(), cost);
+        return order;
     }
 
-    public List<ProductDto> getAllByOrderId(int orderId) {
-        OrderDto order = getById(orderId);
-        return order.getProducts();
+    public List<ProductDto> getAllProductsByOrderId(int orderId) {
+        return jdbcTemplate.query("SELECT * FROM Products WHERE order_id=" + orderId,
+                new BeanPropertyRowMapper<>(ProductDto.class));
     }
 
-    public ProductDto addProduct(int orderId, ProductDto product) {
+    public List<ProductDto> getAllProductsByUsername(String username) {
+        OrderDto order = getByUsername(username);
+        return jdbcTemplate.query("SELECT * FROM Products WHERE order_id=" + order.getId(),
+                new BeanPropertyRowMapper<>(ProductDto.class));
+    }
+
+    public ProductDto addProductToOrder(int orderId, ProductDto product) {
+        product.setOrderId(orderId);
         OrderDto order = getById(orderId);
-        order.setCost(order.getCost() + product.getCost());
-        List<ProductDto> products = order.getProducts();
-        int productIndex = products.size() + 1;
-        product.setId(productIndex);
-        products.add(product);
-        order.setProducts(products);
+        double orderCost = calculateOrderCost(order) + product.getCost();
+        jdbcTemplate.update("INSERT INTO Products VALUES (DEFAULT, ?, ?, ?)",
+                product.getName(), product.getCost(), product.getOrderId());
+        jdbcTemplate.update("UPDATE Orders SET cost = ? WHERE id = ?", orderCost, orderId);
         return product;
     }
 
-    public ProductDto removeProduct(int orderID, int productId) {
-        ProductDto removedProduct = null;
-        OrderDto order = getById(orderID);
+    public double calculateOrderCost(OrderDto order) {
         List<ProductDto> products = order.getProducts();
-        for (ProductDto product : products) {
-            if (product.getId() == productId) {
-                removedProduct = product;
-                order.setCost(order.getCost() - product.getCost());
-                products.remove(product);
-            }
-        }
-        return removedProduct;
-    }
-
-    public ProductDto updateProduct(int orderId, ProductDto newProduct) {
-        OrderDto order = getById(orderId);
-        List<ProductDto> products = order.getProducts();
-        for (ProductDto oldProduct : products) {
-            if (oldProduct.getId() == newProduct.getId()) {
-                order.setCost(order.getCost() - oldProduct.getCost() + newProduct.getCost());
-                oldProduct.setName(newProduct.getName());
-                oldProduct.setCost(newProduct.getCost());
-            }
-        }
-        return newProduct;
-    }
-
-    public double calculateCost(OrderDto order) {
-        List<ProductDto> products = order.getProducts();
-        double sum = 0.0;
-        if (!products.isEmpty()) {
+        if (products == null || products.isEmpty()) {
+            return 0.0;
+        } else {
+            double productsCost = 0.0;
             for (ProductDto product : products) {
-                sum += product.getCost();
+                productsCost += product.getCost();
             }
+            return productsCost;
         }
-        return sum;
     }
 
 }

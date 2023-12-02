@@ -2,9 +2,7 @@ package com.example.springcoredemo.controller;
 
 import com.example.springcoredemo.dto.OrderDto;
 import com.example.springcoredemo.dto.ProductDto;
-import com.example.springcoredemo.service.OrderServiceImpl;
-
-
+import com.example.springcoredemo.service.OrderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -13,10 +11,10 @@ import java.util.List;
 @RestController
 @RequestMapping("/orders")
 public class OrderController {
-    private OrderServiceImpl orderService;
+    private OrderService orderService;
 
     @Autowired
-    public OrderController(OrderServiceImpl orderService) {
+    public OrderController(OrderService orderService) {
         this.orderService = orderService;
     }
 
@@ -25,43 +23,33 @@ public class OrderController {
         return orderService.getAll();
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("/id/{id}")
     public OrderDto getById(@PathVariable int id) {
         return orderService.getById(id);
     }
 
+    @GetMapping("/username/{username}")
+    public OrderDto getByUsername(@PathVariable String username) {
+        return orderService.getByUsername(username);
+    }
+
     @PostMapping
-    public OrderDto addOrder(@RequestBody OrderDto orderDto) {
-        return orderService.addOrder(orderDto);
+    public OrderDto addOrder(@RequestBody OrderDto order) {
+        return orderService.add(order);
     }
 
-    @DeleteMapping("/{id}")
-    public OrderDto removeOrder(@PathVariable int id) {
-        return orderService.removeOrder(id);
+    @GetMapping("/id/{orderId}/products")
+    public List<ProductDto> getAllProductsByOrderId(@PathVariable int orderId) {
+        return orderService.getAllProductsByOrderId(orderId);
     }
 
-    @PutMapping
-    public OrderDto updateOrder(@RequestBody OrderDto orderDto) {
-        return orderService.updateOrder(orderDto);
-    }
-
-    @GetMapping("/{orderId}/products")
-    public List<ProductDto> getAllByOrderId(@PathVariable int orderId) {
-        return orderService.getAllByOrderId(orderId);
+    @GetMapping("/username/{username}/products")
+    public List<ProductDto> getAllProductsByUsername(@PathVariable String username) {
+        return orderService.getAllProductsByUsername(username);
     }
 
     @PostMapping("/{orderID}/products")
-    public ProductDto addProduct(@PathVariable int orderID, @RequestBody ProductDto productDto) {
-        return orderService.addProduct(orderID, productDto);
-    }
-
-    @DeleteMapping("/{orderId}/products/{productId}")
-    public ProductDto removeProduct(@PathVariable int orderId, @PathVariable int productId) {
-        return orderService.removeProduct(orderId, productId);
-    }
-
-    @PutMapping("/{orderId}/products")
-    public ProductDto updateProduct(@PathVariable int orderId, @RequestBody ProductDto productDto) {
-        return orderService.updateProduct(orderId, productDto);
+    public ProductDto addProductToOrder(@PathVariable int orderID, @RequestBody ProductDto product) {
+        return orderService.addProductToOrder(orderID, product);
     }
 }
