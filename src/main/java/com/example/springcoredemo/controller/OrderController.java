@@ -1,55 +1,46 @@
 package com.example.springcoredemo.controller;
 
-import com.example.springcoredemo.dto.OrderDto;
-import com.example.springcoredemo.dto.ProductDto;
+
+import com.example.springcoredemo.model.Order;
 import com.example.springcoredemo.service.OrderService;
-import org.springframework.beans.factory.annotation.Autowired;
+
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
-@RequestMapping("/orders")
+@RequestMapping("/api/v1/orders")
 public class OrderController {
-    private OrderService orderService;
 
-    @Autowired
+    private final OrderService orderService;
+
     public OrderController(OrderService orderService) {
         this.orderService = orderService;
     }
 
-    @GetMapping
-    public List<OrderDto> getAll() {
-        return orderService.getAll();
+    @GetMapping(path = "/{id}")
+    public Order getOrderById(@PathVariable Integer id) {
+        return orderService.getOrderById(id).orElse(null);
     }
 
-    @GetMapping("/id/{id}")
-    public OrderDto getById(@PathVariable int id) {
-        return orderService.getById(id);
-    }
-
-    @GetMapping("/username/{username}")
-    public OrderDto getByUsername(@PathVariable String username) {
-        return orderService.getByUsername(username);
+    @GetMapping("/order")
+    public List<Order> getAllOrders() {
+        return orderService.getAllOrders();
     }
 
     @PostMapping
-    public OrderDto addOrder(@RequestBody OrderDto order) {
-        return orderService.add(order);
+    public void saveOrder(@RequestBody Order order) {
+        orderService.saveOrder(order);
     }
 
-    @GetMapping("/id/{orderId}/products")
-    public List<ProductDto> getAllProductsByOrderId(@PathVariable int orderId) {
-        return orderService.getAllProductsByOrderId(orderId);
+    @PutMapping
+    public void updateOrder(@RequestBody Order order) {
+        orderService.updateOrder(order);
     }
 
-    @GetMapping("/username/{username}/products")
-    public List<ProductDto> getAllProductsByUsername(@PathVariable String username) {
-        return orderService.getAllProductsByUsername(username);
+    @DeleteMapping(path = "/{id}")
+    public void deleteOrder(@PathVariable Integer id) {
+        orderService.deleteOrder(id);
     }
 
-    @PostMapping("/{orderID}/products")
-    public ProductDto addProductToOrder(@PathVariable int orderID, @RequestBody ProductDto product) {
-        return orderService.addProductToOrder(orderID, product);
-    }
 }

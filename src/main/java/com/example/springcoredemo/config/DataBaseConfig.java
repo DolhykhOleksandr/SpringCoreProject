@@ -7,13 +7,13 @@ import org.springframework.jdbc.datasource.DriverManagerDataSource;
 import javax.sql.DataSource;
 
 @Configuration
-public class SpringConfig {
+public class DataBaseConfig {
     @Bean
     public DataSource dataSource() {
         DriverManagerDataSource driverManagerDataSource = new DriverManagerDataSource();
 
         driverManagerDataSource.setDriverClassName("org.postgresql.Driver");
-        driverManagerDataSource.setUrl("jdbc:postgresql://localhost:5432");
+        driverManagerDataSource.setUrl("jdbc:postgresql://localhost:5432/postgres");
         driverManagerDataSource.setUsername("postgres");
         driverManagerDataSource.setPassword("postgres");
 
