@@ -1,4 +1,4 @@
-package com.example.springcoredemo.controller;
+package com.example.springcoredemo.controller.rest;
 
 import com.example.springcoredemo.model.Product;
 import com.example.springcoredemo.service.ProductService;
