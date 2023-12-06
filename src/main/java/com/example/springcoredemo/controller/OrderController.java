@@ -23,7 +23,7 @@ public class OrderController {
         return orderService.getOrderById(id).orElse(null);
     }
 
-    @GetMapping("/order")
+    @GetMapping
     public List<Order> getAllOrders() {
         return orderService.getAllOrders();
     }

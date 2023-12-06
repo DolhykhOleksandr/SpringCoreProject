@@ -1,7 +1,7 @@
 CREATE TABLE IF NOT EXISTS public."order"
 (
     id   integer          NOT NULL GENERATED ALWAYS AS IDENTITY ( INCREMENT 1 START 1 MINVALUE 1 MAXVALUE 2147483647 CACHE 1 ),
-    date date             NOT NULL,
+    date  timestamp DEFAULT CURRENT_TIMESTAMP NOT NULL,
     cost double precision NOT NULL,
     CONSTRAINT order_pkey PRIMARY KEY (id)
 );
@@ -34,6 +34,6 @@ CREATE TABLE IF NOT EXISTS public.order_product
         ON DELETE CASCADE
 );
 
-INSERT INTO public."order" (date, cost) VALUES ('2023-12-05', 100.00);
+INSERT INTO public."order" (cost) VALUES (100.00);
 INSERT INTO public.product (name, cost) VALUES ('Product1', 50.00);
 INSERT INTO public.order_product (order_id, product_id) VALUES (1, 1);
