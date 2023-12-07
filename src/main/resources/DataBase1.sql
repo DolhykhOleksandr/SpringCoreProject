@@ -34,6 +34,6 @@ CREATE TABLE IF NOT EXISTS public.order_product
         ON DELETE CASCADE
 );
 
-INSERT INTO public."order" (cost) VALUES (100.00);
+INSERT INTO public."order" (date,cost) VALUES (CURRENT_TIMESTAMP, 100.0);;
 INSERT INTO public.product (name, cost) VALUES ('Product1', 50.00);
-INSERT INTO public.order_product (order_id, product_id) VALUES (1, 1);
+VALUES (currval(pg_get_serial_sequence('"order"', 'id')), currval(pg_get_serial_sequence('product', 'id')));
