@@ -7,9 +7,10 @@ import lombok.Data;
 @Data
 @AllArgsConstructor
 @Builder
-public class OrderAndProduct {
+public class ProductDTO {
 
-    private Integer orderId;
-    private Integer productId;
+    private Integer id;
+    private String name;
+    private Double cost;
 
 }

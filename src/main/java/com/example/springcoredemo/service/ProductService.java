@@ -1,46 +1,45 @@
 package com.example.springcoredemo.service;
 
-import com.example.springcoredemo.model.Product;
-import com.example.springcoredemo.repository.dao.ProductDao;
-import com.example.springcoredemo.utils.Util;
+
+import com.example.springcoredemo.converter.ProductConverter;
+import com.example.springcoredemo.model.ProductDTO;
+import com.example.springcoredemo.repository.ProductRepository;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class ProductService {
 
-    private final ProductDao productDao;
+    private final ProductRepository productRepository;
 
-    public ProductService(ProductDao productDao) {
-        this.productDao = productDao;
+    public ProductService(ProductRepository productRepository) {
+        this.productRepository = productRepository;
     }
 
-    public Optional<Product> getProductById(Integer id) {
-        return productDao.getById(id);
+    public ProductDTO get(Integer id) {
+        return ProductConverter.productToProductDTO(productRepository.findById(id).orElseThrow());
     }
 
-    public List<Product> getAllProducts() {
-        return productDao.getAllProducts();
+    public List<ProductDTO> getAll() {
+        List<ProductDTO> products = new ArrayList<>();
+        productRepository.findAll()
+                .forEach(product -> products.add(ProductConverter.productToProductDTO(product)));
+        return products;
     }
 
-    public void saveProduct(Product product) {
-        if (Util.checkNull(product, product.getName(), product.getCost()))
-            throw new IllegalArgumentException("Can't save null product");
-        productDao.save(product);
+    public void save(ProductDTO productDTO) {
+        productRepository.save(ProductConverter.productDTOToProduct(productDTO));
     }
 
-    public void updateProduct(Product product) {
-        if (Util.checkNull(product, product.getName(), product.getCost(), product.getId()))
-            throw new IllegalArgumentException("Can't update null product");
-        productDao.update(product);
+    public void update(ProductDTO productDTO) {
+        save(productDTO);
     }
 
-    public void deleteProduct(Integer id) {
-        if (Util.checkNull(id))
-            throw new IllegalArgumentException("Can't delete null product");
-        productDao.delete(id);
+    public void delete(Integer id) {
+        productRepository.deleteById(id);
     }
+
 
 }
