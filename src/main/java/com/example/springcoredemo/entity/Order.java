@@ -11,10 +11,8 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.relational.core.mapping.MappedCollection;
 import org.springframework.data.relational.core.mapping.Table;
 
-
 import java.time.LocalDate;
 import java.util.Set;
-
 
 @Table("order")
 @Data
@@ -26,7 +24,7 @@ public class Order {
     private Integer orderId;
     private LocalDate date;
     private Double cost;
-    @MappedCollection(idColumn = "order_id")
+    @MappedCollection(idColumn = "ORDER_ID")
     private Set<ProductRef> products;
 
     public void addProduct(Product product) {
