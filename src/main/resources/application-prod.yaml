@@ -5,4 +5,4 @@ spring:
     password: postgres
   sql:
     init:
-      schema-locations: classpath:database-prod.sql
+      schema-locations: classpath:schema-prod.sql
