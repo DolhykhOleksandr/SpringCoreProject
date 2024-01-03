@@ -1,5 +1,6 @@
 package com.example.springcoredemo.service;
 
+
 import com.example.springcoredemo.converter.ProductConverter;
 import com.example.springcoredemo.entity.Product;
 import com.example.springcoredemo.model.ProductDTO;
@@ -9,6 +10,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
+import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -25,7 +27,9 @@ public class ProductServiceTest {
 
     @Mock
     private ProductRepository productRepository;
+    @InjectMocks
     private ProductService productService;
+    @Mock
     private Product product;
     private Integer productId;
 

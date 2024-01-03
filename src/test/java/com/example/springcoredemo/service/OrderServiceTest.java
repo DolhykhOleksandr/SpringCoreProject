@@ -1,5 +1,6 @@
 package com.example.springcoredemo.service;
 
+
 import com.example.springcoredemo.converter.OrderConverter;
 import com.example.springcoredemo.converter.ProductConverter;
 import com.example.springcoredemo.entity.Order;
@@ -11,6 +12,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
+import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -31,9 +33,12 @@ public class OrderServiceTest {
     private OrderRepository orderRepository;
     @Mock
     private ProductService productService;
+    @InjectMocks
     private OrderService orderService;
+    @Mock
     private Order order;
     private Integer orderId;
+    @Mock
     private List<Product> products;
 
     @BeforeEach

@@ -1,7 +1,6 @@
 package com.example.springcoredemo.controller;
 
 
-
 import com.example.springcoredemo.converter.OrderConverter;
 import com.example.springcoredemo.converter.ProductConverter;
 import com.example.springcoredemo.entity.Order;
@@ -78,7 +77,7 @@ class OrderControllerMockTest {
 
     @Test
     void getAll() {
-        OrderDTO[] orderDTOS = new OrderDTO[] {orderExpected};
+        OrderDTO[] orderDTOS = new OrderDTO[]{orderExpected};
 
         OrderDTO[] orderDTOSActual = restTemplate.getForObject(
                 "http://localhost:" + port + "/api/v1/orders",
@@ -95,7 +94,6 @@ class OrderControllerMockTest {
                         .content(Util.asJsonString(orderExpected)))
                 .andExpect(status().is2xxSuccessful());
     }
-
 
 
     @Test
