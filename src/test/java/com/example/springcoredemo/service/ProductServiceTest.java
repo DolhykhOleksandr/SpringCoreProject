@@ -29,7 +29,6 @@ public class ProductServiceTest {
     private ProductRepository productRepository;
     @InjectMocks
     private ProductService productService;
-    @Mock
     private Product product;
     private Integer productId;
 
@@ -42,14 +41,13 @@ public class ProductServiceTest {
 
     @Test
     public void get() {
-        // given
+
         ProductDTO productDTOExpected = ProductConverter.productToProductDTO(product);
         when(productRepository.findById(Mockito.anyInt())).thenReturn(Optional.of(product));
 
-        // when
         ProductDTO productDTOActual = productService.get(productId);
 
-        // then
+
         Assertions.assertEquals(productDTOExpected, productDTOActual);
         assertThrows(NoSuchElementException.class, () -> {
             productService.get(null);
@@ -58,7 +56,7 @@ public class ProductServiceTest {
 
     @Test
     public void getAll() {
-        // given
+
         List<Product> products = List.of(product);
         List<ProductDTO> productDTOSExpected = products
                 .stream()
@@ -66,34 +64,34 @@ public class ProductServiceTest {
                 .toList();
         when(productRepository.findAll()).thenReturn(products);
 
-        // when
+
         List<ProductDTO> productDTOSActual = productService.getAll();
 
-        // then
+
         Assertions.assertEquals(productDTOSExpected, productDTOSActual);
     }
 
     @Test
     public void save() {
-        // given
-        // when
+
+
         productService.save(ProductConverter.productToProductDTO(product));
 
-        // then
+
         Assertions.assertEquals(product, getCapturedProduct());
     }
 
     @Test
     public void update() {
-        // given
+
         when(productRepository.save(product)).thenReturn(product);
         product.setName("Big Mac");
         product.setCost(140.00);
 
-        // when
+
         productService.update(ProductConverter.productToProductDTO(product));
 
-        // then
+
         Assertions.assertEquals(product, getCapturedProduct());
     }
 
@@ -107,13 +105,13 @@ public class ProductServiceTest {
 
     @Test
     public void delete() {
-        // given - precondition or setup
+
         doNothing().when(productRepository).deleteById(productId);
 
-        // when -  action or the behaviour that we are going test
+
         productService.delete(productId);
 
-        // then - verify the output
+
         verify(productRepository, times(1)).deleteById(productId);
     }
 

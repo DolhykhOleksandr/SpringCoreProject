@@ -26,6 +26,7 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 
+
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -33,6 +34,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @AutoConfigureMockMvc
 @ActiveProfiles("dev")
 class OrderControllerMockTest {
+
+    // TODO add feature for testing OrderController with login and password
 
     @Value(value = "${local.server.port}")
     private int port;
@@ -98,7 +101,7 @@ class OrderControllerMockTest {
 
     @Test
     void update() throws Exception {
-        order.setDate(LocalDate.of(2023, 5, 10));
+        order.setDate(LocalDate.of(2024, 1, 3));
         OrderDTO orderExpected = orderToOrderDTO(order);
 
         mockMvc.perform(put("/api/v1/orders")

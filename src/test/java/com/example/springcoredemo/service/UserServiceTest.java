@@ -35,9 +35,7 @@ class UserServiceTest {
     private PasswordEncoder passwordEncoder;
     @InjectMocks
     private UserService userService;
-    @Mock
     private User user;
-    @Mock
     private Role role;
 
     @BeforeEach
@@ -49,41 +47,41 @@ class UserServiceTest {
 
     @Test
     void findUserByUsername() {
-        // given
+
         when(userRepository.findUserByUsername(user.getUsername())).thenReturn(user);
 
-        // when
+
         User actualUser = userService.findUserByUsername(user.getUsername());
 
-        // then
+
         Assertions.assertEquals(user, actualUser);
 
     }
 
     @Test
     void findAllUsers() {
-        // given
+
         Iterable<User> userIterable = List.of(user);
         List<UserDTO> userDTOSExpected = List.of(UserConverter.userToUserDTO(user));
         when(userRepository.findAll()).thenReturn(userIterable);
 
-        // when
+
         List<UserDTO> userDTOSActual = userService.findAllUsers();
 
-        // then
+
         Assertions.assertEquals(userDTOSExpected, userDTOSActual);
     }
 
     @Test
     void saveUser() {
-        // given
+
         when(passwordEncoder.encode(anyString())).thenReturn(user.getPassword());
         when(roleRepository.findByRoleName(role.getRoleName())).thenReturn(role);
 
-        // when
+
         userService.saveUser(UserConverter.userToUserDTO(user));
 
-        // then
+
         Assertions.assertEquals(user, getCapturedUser());
 
     }

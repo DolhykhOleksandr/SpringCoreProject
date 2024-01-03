@@ -2,6 +2,7 @@ package com.example.springcoredemo;
 
 
 
+
 import com.example.springcoredemo.entity.Permission;
 import com.example.springcoredemo.entity.Role;
 import com.example.springcoredemo.entity.User;
@@ -17,6 +18,8 @@ public class TestObjects {
                 .email("oleksandr@gmail.com")
                 .username("oleksandr")
                 .password(new BCryptPasswordEncoder().encode("password"))
+                .disabled(true)
+                .locked(false)
                 .roles(new HashSet<>())
                 .build();
         user.addRole(getRole());

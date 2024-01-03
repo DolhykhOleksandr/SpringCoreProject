@@ -35,10 +35,9 @@ public class OrderServiceTest {
     private ProductService productService;
     @InjectMocks
     private OrderService orderService;
-    @Mock
     private Order order;
     private Integer orderId;
-    @Mock
+
     private List<Product> products;
 
     @BeforeEach
@@ -57,15 +56,15 @@ public class OrderServiceTest {
 
     @Test
     public void get() {
-        // given
+
         OrderDTO orderDTOExpected = orderToOrderDTO(order);
         when(orderRepository.findById(Mockito.anyInt())).thenReturn(Optional.of(order));
         setMockForEachProduct(products);
 
-        // when
+
         OrderDTO orderDTOActual = orderService.get(orderId);
 
-        // then
+
         Assertions.assertEquals(orderDTOExpected, orderDTOActual);
         assertThrows(NoSuchElementException.class, () -> {
             orderService.get(null);
@@ -88,7 +87,7 @@ public class OrderServiceTest {
 
     @Test
     public void getAll() {
-        // given
+
         List<Order> orders = List.of(order);
         List<OrderDTO> orderDTOSExpected = orders.stream()
                 .map(this::orderToOrderDTO)
@@ -98,22 +97,22 @@ public class OrderServiceTest {
             setMockForEachProduct(products);
         }
 
-        // when
+
         List<OrderDTO> orderDTOSActual = orderService.getAll();
 
-        // then
+
         Assertions.assertEquals(orderDTOSExpected, orderDTOSActual);
     }
 
     @Test
     public void save() {
-        // given
+
         setMockForEachProduct(products);
 
-        // when
+
         orderService.save(orderToOrderDTO(order));
 
-        // then
+
         Order actualOrder = getCapturedOrder();
         Assertions.assertEquals(order, actualOrder);
         Assertions.assertEquals(order.getCost(), actualOrder.getCost());
@@ -129,28 +128,28 @@ public class OrderServiceTest {
 
     @Test
     public void update() {
-        // given
+
         when(orderRepository.save(order)).thenReturn(order);
         products.get(0).setCost(100.00);
         order.setCost(190.00);
         setMockForEachProduct(products);
 
-        // when
+
         orderService.update(orderToOrderDTO(order));
 
-        // then
+
         Assertions.assertEquals(order, getCapturedOrder());
     }
 
     @Test
     public void delete() {
-        // given - precondition or setup
+
         doNothing().when(orderRepository).deleteById(orderId);
 
-        // when -  action or the behaviour that we are going test
+
         orderService.delete(orderId);
 
-        // then - verify the output
+
         verify(orderRepository, times(1)).deleteById(orderId);
     }
 

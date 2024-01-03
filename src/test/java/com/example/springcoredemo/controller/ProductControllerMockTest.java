@@ -28,6 +28,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @ActiveProfiles("dev")
 class ProductControllerMockTest {
 
+    // TODO add feature for testing ProductController with login and password
     @Value(value = "${local.server.port}")
     private int port;
 

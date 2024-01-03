@@ -1,7 +1,6 @@
 package com.example.springcoredemo.converter;
 
 
-
 import com.example.springcoredemo.entity.User;
 import com.example.springcoredemo.model.UserDTO;
 
@@ -29,5 +28,4 @@ public class UserConverter {
         user.setRoles(new HashSet<>());
         return user;
     }
-
 }

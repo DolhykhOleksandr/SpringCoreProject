@@ -2,7 +2,7 @@ package com.example.springcoredemo.security.config;
 
 
 
-import com.example.springcoredemo.security.CustomUserDetailsService;
+import com.example.springcoredemo.service.CustomUserDetailsService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -34,9 +34,12 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         final String apiTemplate = "/api/**";
-        http.csrf().disable()
+        http
+//                .csrf().csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
+//                .and()
+                .csrf().disable()
                 .authorizeHttpRequests((authorize) ->
-                        authorize.requestMatchers("/register/**", "/index").permitAll()
+                        authorize.requestMatchers("/register/**", "/index", "/confirm").permitAll()
                                 .requestMatchers("/users").hasRole(ADMIN.name())
                                 .requestMatchers(HttpMethod.DELETE, apiTemplate).hasAuthority(WRITE.getPermission())
                                 .requestMatchers(HttpMethod.POST, apiTemplate).hasAuthority(WRITE.getPermission())

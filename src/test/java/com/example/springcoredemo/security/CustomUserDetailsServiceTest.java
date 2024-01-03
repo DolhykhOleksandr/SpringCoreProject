@@ -1,6 +1,7 @@
 package com.example.springcoredemo.security;
 
 
+
 import com.example.springcoredemo.TestObjects;
 import com.example.springcoredemo.entity.Permission;
 import com.example.springcoredemo.entity.Role;
@@ -8,6 +9,7 @@ import com.example.springcoredemo.entity.User;
 import com.example.springcoredemo.repository.PermissionRepository;
 import com.example.springcoredemo.repository.RoleRepository;
 import com.example.springcoredemo.repository.UserRepository;
+import com.example.springcoredemo.service.CustomUserDetailsService;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -37,11 +39,8 @@ class CustomUserDetailsServiceTest {
     private PermissionRepository permissionRepository;
     @InjectMocks
     private CustomUserDetailsService detailsService;
-    @Mock
     private User user;
-    @Mock
     private Role role;
-    @Mock
     private Permission permission;
 
     @BeforeEach

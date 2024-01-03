@@ -1,7 +1,6 @@
 package com.example.springcoredemo.service;
 
 
-
 import com.example.springcoredemo.converter.UserConverter;
 import com.example.springcoredemo.entity.Role;
 import com.example.springcoredemo.entity.User;
@@ -34,7 +33,7 @@ public class UserService {
         this.userRepository = userRepository;
     }
 
-    public void saveUser(UserDTO userDto) {
+    public User saveUser(UserDTO userDto) {
         User user = UserConverter.userDTOToUser(userDto);
 
         user.setPassword(passwordEncoder.encode(user.getPassword()));
@@ -42,7 +41,7 @@ public class UserService {
         Role role = roleRepository.findByRoleName(ADMIN.name());
         user.addRole(role);
 
-        userRepository.save(user);
+        return userRepository.save(user);
     }
 
     public User findUserByUsername(String username) {
@@ -54,6 +53,10 @@ public class UserService {
         return StreamSupport.stream(users.spliterator(), false)
                 .map(UserConverter::userToUserDTO)
                 .toList();
+    }
+
+    public boolean enableUser(String username) {
+        return userRepository.enableUser(username);
     }
 
 }

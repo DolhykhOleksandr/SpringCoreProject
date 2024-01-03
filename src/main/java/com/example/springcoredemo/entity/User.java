@@ -38,9 +38,18 @@ public class User implements Persistable<String> {
     @Column("EMAIL")
     private String email;
 
+    @Column("LOCKED")
+    private boolean locked = false;
+
+    @Column("DISABLED")
+    private boolean disabled = true;
+
     @MappedCollection(idColumn = "USERNAME")
     private Set<RoleRef> roles;
 
+    /* @MappedCollection(keyColumn = "USERNAME", idColumn = "USERNAME")
+       private Set<ConfirmationToken> tokens;
+    */
     public void addRole(Role role) {
         roles.add(new RoleRef(role.getRoleId()));
     }

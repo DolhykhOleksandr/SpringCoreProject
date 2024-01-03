@@ -1,4 +1,4 @@
-package com.example.springcoredemo.security;
+package com.example.springcoredemo.service;
 
 
 import com.example.springcoredemo.entity.Permission;

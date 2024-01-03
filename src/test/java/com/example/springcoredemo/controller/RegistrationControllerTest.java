@@ -1,6 +1,7 @@
 package com.example.springcoredemo.controller;
 
 
+
 import com.example.springcoredemo.TestObjects;
 import com.example.springcoredemo.converter.UserConverter;
 import com.example.springcoredemo.entity.User;
@@ -22,7 +23,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @AutoConfigureMockMvc
 @ActiveProfiles("dev")
-class UserControllerTest {
+class RegistrationControllerTest {
 
     @Value(value = "${local.server.port}")
     private int port;

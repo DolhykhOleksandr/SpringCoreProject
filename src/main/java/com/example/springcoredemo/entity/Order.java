@@ -1,7 +1,6 @@
 package com.example.springcoredemo.entity;
 
 
-
 import com.example.springcoredemo.entity.ref.ProductRef;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
