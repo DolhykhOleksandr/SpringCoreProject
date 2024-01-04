@@ -4,8 +4,8 @@ spring:
   mail:
     host: localhost
     port: 1025
-    username: postgres
-    password: greetings
+    username: visitor
+    password: visitor
     properties:
       mail:
         smtp:

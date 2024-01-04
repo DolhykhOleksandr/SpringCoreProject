@@ -1,27 +1,42 @@
 package com.example.springcoredemo.entity;
 
 
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
-import org.springframework.data.annotation.Id;
-import org.springframework.data.relational.core.mapping.Column;
-import org.springframework.data.relational.core.mapping.Table;
+import lombok.NoArgsConstructor;
 
-@Table("PRODUCT")
+import java.util.List;
+
 @Data
 @AllArgsConstructor
+@NoArgsConstructor
 @Builder
+@Entity
+@Table(name = "product")
 public class Product {
 
+    @SequenceGenerator(
+            name = "product_seq",
+            sequenceName = "product_seq",
+            allocationSize = 1
+    )
     @Id
-    @Column("PRODUCT_ID")
+    @GeneratedValue(
+            strategy = GenerationType.SEQUENCE,
+            generator = "product_seq"
+    )
+    @Column(name = "product_id")
     private Integer productId;
 
-    @Column("NAME")
+    @Column(name = "name")
     private String name;
 
-    @Column("COST")
+    @Column(name = "cost")
     private Double cost;
+
+    @ManyToMany(mappedBy = "products", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private List<Order> orders;
 
 }

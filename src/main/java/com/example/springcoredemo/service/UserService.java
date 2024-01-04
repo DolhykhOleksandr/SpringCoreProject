@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 
 
 import java.util.List;
+import java.util.Set;
 import java.util.stream.StreamSupport;
 
 import static com.example.springcoredemo.security.UserRole.ADMIN;
@@ -39,7 +40,7 @@ public class UserService {
         user.setPassword(passwordEncoder.encode(user.getPassword()));
 
         Role role = roleRepository.findByRoleName(ADMIN.name());
-        user.addRole(role);
+        user.setRoles(Set.of(role));
 
         return userRepository.save(user);
     }

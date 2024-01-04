@@ -1,8 +1,11 @@
 package com.example.springcoredemo.repository;
 
 
-import com.example.springcoredemo.entity.Permission;
-import org.springframework.data.repository.CrudRepository;
 
-public interface PermissionRepository extends CrudRepository<Permission, Integer> {
+import com.example.springcoredemo.entity.Permission;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
+
+@Repository
+public interface PermissionRepository extends JpaRepository<Permission, Integer> {
 }

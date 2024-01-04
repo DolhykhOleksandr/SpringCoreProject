@@ -1,66 +1,77 @@
 package com.example.springcoredemo.entity;
 
 
-import com.example.springcoredemo.entity.ref.RoleRef;
+import com.google.common.base.Objects;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.springframework.data.annotation.Id;
-import org.springframework.data.domain.Persistable;
-import org.springframework.data.relational.core.mapping.Column;
-import org.springframework.data.relational.core.mapping.MappedCollection;
-import org.springframework.data.relational.core.mapping.Table;
 
 import java.util.Set;
 
-
-@Table("USER")
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
 @Builder
-public class User implements Persistable<String> {
+@Entity
+@Table(name = "user_table")
+public class User {
+
 
     @Id
-    @Column("USERNAME")
+    @Column(name = "username")
     private String username;
 
-    @Column("PASSWORD")
+    @Column(name = "password")
     private String password;
 
-    @Column("FIRST_NAME")
+    @Column(name = "first_name")
     private String firstName;
 
-    @Column("LAST_NAME")
+    @Column(name = "last_name")
     private String lastName;
 
-    @Column("EMAIL")
+    @Column(name = "email")
     private String email;
 
-    @Column("LOCKED")
+    @Column(name = "locked")
     private boolean locked = false;
 
-    @Column("DISABLED")
+    @Column(name = "disabled")
     private boolean disabled = true;
 
-    @MappedCollection(idColumn = "USERNAME")
-    private Set<RoleRef> roles;
+    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @JoinTable(
+            name = "user_role",
+            joinColumns = @JoinColumn(name = "username"),
+            inverseJoinColumns = @JoinColumn(name = "role_id")
+    )
+    private Set<Role> roles;
 
-    /* @MappedCollection(keyColumn = "USERNAME", idColumn = "USERNAME")
-       private Set<ConfirmationToken> tokens;
-    */
-    public void addRole(Role role) {
-        roles.add(new RoleRef(role.getRoleId()));
+    @Override
+    public String toString() {
+        return "User{" +
+                "username='" + username + '\'' +
+                ", password='" + password + '\'' +
+                ", firstName='" + firstName + '\'' +
+                ", lastName='" + lastName + '\'' +
+                ", email='" + email + '\'' +
+                ", locked=" + locked +
+                ", disabled=" + disabled +
+                '}';
     }
 
     @Override
-    public String getId() {
-        return username;
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        User user = (User) o;
+        return locked == user.locked && disabled == user.disabled && Objects.equal(username, user.username) && Objects.equal(password, user.password) && Objects.equal(firstName, user.firstName) && Objects.equal(lastName, user.lastName) && Objects.equal(email, user.email);
     }
 
     @Override
-    public boolean isNew() {
-        return true;
+    public int hashCode() {
+        return Objects.hashCode(username, password, firstName, lastName, email, locked, disabled);
     }
 }

@@ -1,39 +1,55 @@
 package com.example.springcoredemo.entity;
 
 
-import com.example.springcoredemo.entity.ref.ProductRef;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
-import org.springframework.data.annotation.Id;
-import org.springframework.data.relational.core.mapping.Column;
-import org.springframework.data.relational.core.mapping.MappedCollection;
-import org.springframework.data.relational.core.mapping.Table;
+import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
-import java.util.Set;
+import java.util.List;
 
-
-@Table("ORDER")
 @Data
 @AllArgsConstructor
+@NoArgsConstructor
 @Builder
+@Entity
+@Table(name = "order_table")
 public class Order {
 
+    @SequenceGenerator(
+            name = "order_seq",
+            sequenceName = "order_seq",
+            allocationSize = 1
+    )
     @Id
-    @Column("ORDER_ID")
+    @GeneratedValue(
+            strategy = GenerationType.SEQUENCE,
+            generator = "order_seq"
+    )
+    @Column(name = "order_id")
     private Integer orderId;
 
-    @Column("DATE")
+    @Column(name = "date")
     private LocalDate date;
 
-    @Column("COST")
+    @Column(name = "cost")
     private Double cost;
-    @MappedCollection(idColumn = "ORDER_ID")
-    private Set<ProductRef> products;
+    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JoinTable(
+            name = "order_product",
+            joinColumns = @JoinColumn(name = "order_id"),
+            inverseJoinColumns = @JoinColumn(name = "product_id")
+    )
+    private List<Product> products;
 
-    public void addProduct(Product product) {
-        products.add(new ProductRef(product.getProductId()));
+    @Override
+    public String toString() {
+        return "Order{" +
+                "orderId=" + orderId +
+                ", date=" + date +
+                ", cost=" + cost +
+                '}';
     }
-
 }

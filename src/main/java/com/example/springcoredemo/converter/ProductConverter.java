@@ -1,8 +1,13 @@
 package com.example.springcoredemo.converter;
 
 
+
+
 import com.example.springcoredemo.entity.Product;
 import com.example.springcoredemo.model.ProductDTO;
+
+import java.util.ArrayList;
+
 
 public class ProductConverter {
 
@@ -19,6 +24,8 @@ public class ProductConverter {
                 .productId(productDTO.getId())
                 .name(productDTO.getName())
                 .cost(productDTO.getCost())
+                .orders(new ArrayList<>())
                 .build();
     }
+
 }

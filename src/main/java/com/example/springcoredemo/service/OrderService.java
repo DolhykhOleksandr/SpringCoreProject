@@ -4,9 +4,10 @@ package com.example.springcoredemo.service;
 import com.example.springcoredemo.converter.OrderConverter;
 import com.example.springcoredemo.converter.ProductConverter;
 import com.example.springcoredemo.entity.Order;
+import com.example.springcoredemo.entity.Product;
 import com.example.springcoredemo.model.OrderDTO;
-import com.example.springcoredemo.model.ProductDTO;
 import com.example.springcoredemo.repository.OrderRepository;
+import com.example.springcoredemo.repository.ProductRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -17,12 +18,12 @@ import java.util.List;
 public class OrderService {
 
     private final OrderRepository orderRepository;
-    private final ProductService productService;
+    private final ProductRepository productRepository;
 
     public OrderService(OrderRepository orderRepository,
-                        ProductService productService) {
+                        ProductRepository productRepository) {
         this.orderRepository = orderRepository;
-        this.productService = productService;
+        this.productRepository = productRepository;
     }
 
     public OrderDTO get(Integer id) {
@@ -35,7 +36,8 @@ public class OrderService {
         OrderDTO orderDTO = OrderConverter.orderToOrderDTO(order);
         orderDTO.setProductDTOS(order.getProducts()
                 .stream()
-                .map(productRef -> productService.get(productRef.getProductId()))
+                .map(product -> productRepository.findById(product.getProductId()))
+                .map(product -> ProductConverter.productToProductDTO(product.orElseThrow()))
                 .toList());
         return orderDTO;
     }
@@ -49,15 +51,27 @@ public class OrderService {
 
     public void save(OrderDTO orderDTO) {
         Order order = OrderConverter.orderDTOToOrder(orderDTO);
-        double cost = 0.0;
-        for (ProductDTO productDTO : orderDTO.getProductDTOS()) {
-            if (productDTO.getId() != null) {
-                cost += productService.get(productDTO.getId()).getCost();
-                order.addProduct(ProductConverter.productDTOToProduct(productDTO));
-            }
-        }
-        order.setCost(cost);
+
+        List<Product> products = orderDTO.getProductDTOS()
+                .stream()
+                .filter(productDTO -> productDTO.getId() != null)
+                .map(productDTO -> productRepository.findById(productDTO.getId()).orElseThrow())
+                .toList();
+
+        order.setCost(calculateAndGetCost(products));
+        order.setProducts(products);
         orderRepository.save(order);
+    }
+
+    private double calculateAndGetCost(List<Product> products) {
+        double cost = 0.0;
+        for (Product product : products) {
+            if (product.getProductId() != null)
+                cost += productRepository.findById(product.getProductId())
+                        .orElseThrow()
+                        .getCost();
+        }
+        return cost;
     }
 
     public void update(OrderDTO orderDTO) {

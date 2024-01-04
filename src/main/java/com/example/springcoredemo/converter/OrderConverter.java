@@ -1,10 +1,13 @@
 package com.example.springcoredemo.converter;
 
 
+
+
 import com.example.springcoredemo.entity.Order;
 import com.example.springcoredemo.model.OrderDTO;
 
-import java.util.HashSet;
+import java.util.ArrayList;
+
 
 public class OrderConverter {
 
@@ -21,7 +24,8 @@ public class OrderConverter {
                 .orderId(orderDTO.getId())
                 .date(orderDTO.getDate())
                 .cost(orderDTO.getCost())
-                .products(new HashSet<>())
+                .products(new ArrayList<>())
                 .build();
     }
+
 }

@@ -1,7 +1,6 @@
 package com.example.springcoredemo.controller;
 
 
-
 import com.example.springcoredemo.TestObjects;
 import com.example.springcoredemo.converter.UserConverter;
 import com.example.springcoredemo.entity.User;

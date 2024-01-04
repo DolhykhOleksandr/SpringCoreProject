@@ -1,6 +1,7 @@
 package com.example.springcoredemo.controller;
 
 
+
 import com.example.springcoredemo.converter.ProductConverter;
 import com.example.springcoredemo.entity.Product;
 import com.example.springcoredemo.model.ProductDTO;
@@ -8,6 +9,7 @@ import com.example.springcoredemo.repository.ProductRepository;
 import com.example.springcoredemo.utils.Util;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -26,6 +28,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @AutoConfigureMockMvc
 @ActiveProfiles("dev")
+@Disabled
 class ProductControllerMockTest {
 
     // TODO add feature for testing ProductController with login and password

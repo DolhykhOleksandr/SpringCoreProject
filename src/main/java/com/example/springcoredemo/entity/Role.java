@@ -2,36 +2,68 @@ package com.example.springcoredemo.entity;
 
 
 
-import com.example.springcoredemo.entity.ref.PermissionRef;
+import com.google.common.base.Objects;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
-import org.springframework.data.annotation.Id;
-import org.springframework.data.relational.core.mapping.Column;
-import org.springframework.data.relational.core.mapping.MappedCollection;
-import org.springframework.data.relational.core.mapping.Table;
+import lombok.NoArgsConstructor;
 
 import java.util.Set;
 
-
-@Table("ROLE")
 @Data
 @AllArgsConstructor
+@NoArgsConstructor
 @Builder
+@Entity
+@Table(name = "role")
 public class Role {
 
+    @SequenceGenerator(
+            name = "role_seq",
+            sequenceName = "role_seq",
+            allocationSize = 1
+    )
     @Id
-    @Column("ROLE_ID")
+    @GeneratedValue(
+            strategy = GenerationType.SEQUENCE,
+            generator = "role_seq"
+    )
+    @Column(name = "role_id")
     private Integer roleId;
 
-    @Column("ROLE_NAME")
+    @Column(name = "role_name")
     private String roleName;
 
-    @MappedCollection(idColumn = "ROLE_ID")
-    private Set<PermissionRef> permissions;
+    @ManyToMany(mappedBy = "roles")
+    private Set<User> users;
 
-    public void addPermission(Permission permission) {
-        permissions.add(new PermissionRef(permission.getPermissionId()));
+    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @JoinTable(
+            name = "role_permission",
+            joinColumns = @JoinColumn(name = "role_id"),
+            inverseJoinColumns = @JoinColumn(name = "permission_id")
+    )
+    private Set<Permission> permissions;
+
+    @Override
+    public String toString() {
+        return "Role{" +
+                "roleId=" + roleId +
+                ", roleName='" + roleName + '\'' +
+                '}';
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Role role = (Role) o;
+        return Objects.equal(roleId, role.roleId) && Objects.equal(roleName, role.roleName);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(roleId, roleName, users);
+    }
 }

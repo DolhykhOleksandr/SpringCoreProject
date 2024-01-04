@@ -1,34 +1,42 @@
 package com.example.springcoredemo.entity;
 
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.springframework.data.annotation.Id;
-import org.springframework.data.relational.core.mapping.Column;
-import org.springframework.data.relational.core.mapping.Table;
 
 import java.time.LocalDateTime;
 
-@Table("CONFIRMATION_TOKEN")
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
 @Builder
+@Entity
+@Table(name = "confirmation_token")
 public class ConfirmationToken {
 
+    @SequenceGenerator(
+            name = "confirmation_token_seq",
+            sequenceName = "confirmation_token_seq",
+            allocationSize = 1
+    )
     @Id
-    @Column("CONFIRMATION_TOKEN_ID")
+    @GeneratedValue(
+            strategy = GenerationType.SEQUENCE,
+            generator = "confirmation_token_seq"
+    )
+    @Column(name = "confirmation_token_id")
     private Integer id;
-    @Column("TOKEN")
+    @Column(name = "token")
     private String token;
-    @Column("CREATED_AT")
+    @Column(name = "created_at")
     private LocalDateTime createdAt;
-    @Column("EXPIRES_AT")
+    @Column(name = "expires_at")
     private LocalDateTime expiresAt;
-    @Column("CONFIRMED_AT")
+    @Column(name = "confirmed_at")
     private LocalDateTime confirmedAt;
-    @Column("USERNAME")
+    @Column(name = "username")
     private String username;
 
 }

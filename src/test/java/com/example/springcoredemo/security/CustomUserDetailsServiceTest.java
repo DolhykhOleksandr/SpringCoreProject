@@ -1,13 +1,10 @@
 package com.example.springcoredemo.security;
 
 
-
 import com.example.springcoredemo.TestObjects;
 import com.example.springcoredemo.entity.Permission;
 import com.example.springcoredemo.entity.Role;
 import com.example.springcoredemo.entity.User;
-import com.example.springcoredemo.repository.PermissionRepository;
-import com.example.springcoredemo.repository.RoleRepository;
 import com.example.springcoredemo.repository.UserRepository;
 import com.example.springcoredemo.service.CustomUserDetailsService;
 import org.junit.jupiter.api.Assertions;
@@ -24,7 +21,7 @@ import java.util.Optional;
 import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.anyInt;
+
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
 
@@ -33,10 +30,6 @@ class CustomUserDetailsServiceTest {
 
     @Mock
     private UserRepository userRepository;
-    @Mock
-    private RoleRepository roleRepository;
-    @Mock
-    private PermissionRepository permissionRepository;
     @InjectMocks
     private CustomUserDetailsService detailsService;
     private User user;
@@ -45,7 +38,7 @@ class CustomUserDetailsServiceTest {
 
     @BeforeEach
     void setUp() {
-        detailsService = new CustomUserDetailsService(userRepository, roleRepository, permissionRepository);
+        detailsService = new CustomUserDetailsService(userRepository);
         user = TestObjects.getUser();
         role = TestObjects.getRole();
         permission = TestObjects.getPermission();
@@ -53,7 +46,7 @@ class CustomUserDetailsServiceTest {
 
     @Test
     void loadUserByUsername() {
-        // given
+
         UserDetails userDetailsExpected = org.springframework.security.core.userdetails.User.builder()
                 .username(user.getUsername())
                 .password(user.getPassword())
@@ -63,13 +56,11 @@ class CustomUserDetailsServiceTest {
                 ))
                 .build();
         when(userRepository.findById(anyString())).thenReturn(Optional.of(user));
-        when(roleRepository.findById(anyInt())).thenReturn(Optional.of(role));
-        when(permissionRepository.findById(anyInt())).thenReturn(Optional.of(permission));
 
-        // when
+
         UserDetails userDetailsActual = detailsService.loadUserByUsername(user.getUsername());
 
-        // then
+
         Assertions.assertEquals(userDetailsExpected, userDetailsActual);
 
         assertThrows(NoSuchElementException.class, () -> {
