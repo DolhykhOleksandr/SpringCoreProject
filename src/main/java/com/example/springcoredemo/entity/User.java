@@ -15,32 +15,25 @@ import java.util.Set;
 @Data
 @Builder
 @Entity
-@Table(name = "user_table")
+@Table(name = "user_t")
 public class User {
 
 
     @Id
     @Column(name = "username")
     private String username;
-
     @Column(name = "password")
     private String password;
-
     @Column(name = "first_name")
     private String firstName;
-
     @Column(name = "last_name")
     private String lastName;
-
     @Column(name = "email")
     private String email;
-
     @Column(name = "locked")
     private boolean locked = false;
-
     @Column(name = "disabled")
     private boolean disabled = true;
-
     @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinTable(
             name = "user_role",

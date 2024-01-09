@@ -8,8 +8,7 @@ import lombok.*;
 @AllArgsConstructor
 @Data
 @Builder
-public class UserDTO
-{
+public class UserDTO {
     @NotEmpty(message = "Username should not be empty")
     private String username;
     @NotEmpty(message = "Password should not be empty")

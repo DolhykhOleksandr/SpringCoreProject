@@ -1,6 +1,5 @@
 package com.example.springcoredemo.security;
 
-
 import com.example.springcoredemo.TestObjects;
 import com.example.springcoredemo.entity.Permission;
 import com.example.springcoredemo.entity.Role;
@@ -16,6 +15,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+
 import java.util.NoSuchElementException;
 import java.util.Optional;
 import java.util.Set;

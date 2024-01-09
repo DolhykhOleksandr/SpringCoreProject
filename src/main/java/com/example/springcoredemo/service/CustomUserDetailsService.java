@@ -1,7 +1,6 @@
 package com.example.springcoredemo.service;
 
 
-
 import com.example.springcoredemo.entity.Permission;
 import com.example.springcoredemo.entity.Role;
 import com.example.springcoredemo.entity.User;

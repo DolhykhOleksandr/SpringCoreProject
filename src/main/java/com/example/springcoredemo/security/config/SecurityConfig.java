@@ -13,7 +13,6 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 import static com.example.springcoredemo.security.UserPermission.WRITE;
@@ -24,7 +23,6 @@ import static com.example.springcoredemo.security.UserRole.ADMINTRAINEE;
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
-
     private final CustomUserDetailsService customUserDetailsService;
 
     public SecurityConfig(CustomUserDetailsService customUserDetailsService) {
@@ -35,11 +33,11 @@ public class SecurityConfig {
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         final String apiTemplate = "/api/**";
         http
-//                .csrf().csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
-//                .and()
                 .csrf().disable()
                 .authorizeHttpRequests((authorize) ->
-                        authorize.requestMatchers("/register/**", "/index", "/confirm").permitAll()
+                        authorize
+                                .requestMatchers(new AntPathRequestMatcher("/h2-console/**")).permitAll()
+                                .requestMatchers("/register/**", "/index", "/confirm").permitAll()
                                 .requestMatchers("/users").hasRole(ADMIN.name())
                                 .requestMatchers(HttpMethod.DELETE, apiTemplate).hasAuthority(WRITE.getPermission())
                                 .requestMatchers(HttpMethod.POST, apiTemplate).hasAuthority(WRITE.getPermission())
@@ -55,7 +53,10 @@ public class SecurityConfig {
                         logout -> logout
                                 .logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
                                 .permitAll()
-                ).httpBasic();
+                )
+                .headers().frameOptions().disable()
+                .and()
+                .httpBasic();
         return http.build();
     }
 
@@ -76,6 +77,4 @@ public class SecurityConfig {
     public AuthenticationManager authenticationManager() {
         return new ProviderManager(daoAuthenticationProvider());
     }
-
-
 }

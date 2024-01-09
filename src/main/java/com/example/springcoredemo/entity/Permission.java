@@ -17,22 +17,13 @@ import java.util.Set;
 @Table(name = "permission")
 public class Permission {
 
-    @SequenceGenerator(
-            name = "permission_seq",
-            sequenceName = "permission_seq",
-            allocationSize = 1
-    )
     @Id
-    @GeneratedValue(
-            strategy = GenerationType.SEQUENCE,
-            generator = "permission_seq"
-    )
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "permission_id")
     private Integer permissionId;
 
     @Column(name = "permission_name")
     private String permissionName;
-
     @ManyToMany(mappedBy = "permissions", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private Set<Role> roles;
 

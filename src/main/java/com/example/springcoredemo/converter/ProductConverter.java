@@ -1,8 +1,6 @@
 package com.example.springcoredemo.converter;
 
 
-
-
 import com.example.springcoredemo.entity.Product;
 import com.example.springcoredemo.model.ProductDTO;
 

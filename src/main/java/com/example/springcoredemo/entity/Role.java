@@ -1,7 +1,5 @@
 package com.example.springcoredemo.entity;
 
-
-
 import com.google.common.base.Objects;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -19,25 +17,15 @@ import java.util.Set;
 @Table(name = "role")
 public class Role {
 
-    @SequenceGenerator(
-            name = "role_seq",
-            sequenceName = "role_seq",
-            allocationSize = 1
-    )
     @Id
-    @GeneratedValue(
-            strategy = GenerationType.SEQUENCE,
-            generator = "role_seq"
-    )
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "role_id")
     private Integer roleId;
 
     @Column(name = "role_name")
     private String roleName;
-
     @ManyToMany(mappedBy = "roles")
     private Set<User> users;
-
     @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinTable(
             name = "role_permission",

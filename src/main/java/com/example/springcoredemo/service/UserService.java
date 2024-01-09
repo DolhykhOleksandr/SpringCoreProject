@@ -56,8 +56,8 @@ public class UserService {
                 .toList();
     }
 
-    public boolean enableUser(String username) {
-        return userRepository.enableUser(username);
-    }
+    public void enableUser(String username) {
+        userRepository.enableUser(username);
 
+    }
 }

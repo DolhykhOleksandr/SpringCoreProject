@@ -1,8 +1,6 @@
 package com.example.springcoredemo.repository;
 
 
-
-
 import com.example.springcoredemo.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
@@ -18,5 +16,5 @@ public interface UserRepository extends JpaRepository<User, String> {
     @Query("UPDATE User u " +
             "SET u.disabled = false " +
             "WHERE u.username = :username")
-    boolean enableUser(@Param("username") String username);
+    void enableUser(@Param("username") String username);
 }

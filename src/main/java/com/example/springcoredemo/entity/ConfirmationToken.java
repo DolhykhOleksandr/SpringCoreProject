@@ -16,16 +16,8 @@ import java.time.LocalDateTime;
 @Table(name = "confirmation_token")
 public class ConfirmationToken {
 
-    @SequenceGenerator(
-            name = "confirmation_token_seq",
-            sequenceName = "confirmation_token_seq",
-            allocationSize = 1
-    )
     @Id
-    @GeneratedValue(
-            strategy = GenerationType.SEQUENCE,
-            generator = "confirmation_token_seq"
-    )
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "confirmation_token_id")
     private Integer id;
     @Column(name = "token")
@@ -38,5 +30,4 @@ public class ConfirmationToken {
     private LocalDateTime confirmedAt;
     @Column(name = "username")
     private String username;
-
 }

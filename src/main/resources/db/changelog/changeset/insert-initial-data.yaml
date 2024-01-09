@@ -1,0 +1,144 @@
+databaseChangeLog:
+  - changeSet:
+      id: create-initial-queries
+      author: Oleksandr
+      changes:
+        - insert:
+            tableName: permission
+            columns:
+              - column:
+                  name: permission_id
+                  value: 1
+              - column:
+                  name: permission_name
+                  value: read
+
+        - insert:
+            tableName: permission
+            columns:
+              - column:
+                  name: permission_id
+                  value: 2
+              - column:
+                  name: permission_name
+                  value: write
+
+        - insert:
+            tableName: role
+            columns:
+              - column:
+                  name: role_id
+                  value: 1
+              - column:
+                  name: role_name
+                  value: ADMIN
+
+        - insert:
+            tableName: role
+            columns:
+              - column:
+                  name: role_id
+                  value: 2
+              - column:
+                  name: role_name
+                  value: ADMINTRAINEE
+
+        - insert:
+            tableName: role_permission
+            columns:
+              - column:
+                  name: role_id
+                  value: 1
+              - column:
+                  name: permission_id
+                  value: 1
+
+        - insert:
+            tableName: role_permission
+            columns:
+              - column:
+                  name: role_id
+                  value: 1
+              - column:
+                  name: permission_id
+                  value: 2
+
+        - insert:
+            tableName: role_permission
+            columns:
+              - column:
+                  name: role_id
+                  value: 2
+              - column:
+                  name: permission_id
+                  value: 1
+
+        - insert:
+            tableName: user_t
+            columns:
+              - column:
+                  name: username
+                  value: anton
+              - column:
+                  name: password
+                  value: $2a$10$eRfSRbe1iHM37FX93nr9z.hLJ.R6LkZGGcoTCoq11zZiRHKymd3K2
+              - column:
+                  name: first_name
+                  value: Anton
+              - column:
+                  name: last_name
+                  value: Shevchenko
+              - column:
+                  name: email
+                  value: anton@gmail.com
+              - column:
+                  name: locked
+                  value: false
+              - column:
+                  name: disabled
+                  value: false
+
+        - insert:
+            tableName: user_t
+            columns:
+              - column:
+                  name: username
+                  value: mike
+              - column:
+                  name: password
+                  value: $$2a$10$eRfSRbe1iHM37FX93nr9z.hLJ.R6LkZGGcoTCoq11zZiRHKymd3K2
+              - column:
+                  name: first_name
+                  value: Mike
+              - column:
+                  name: last_name
+                  value: Marin
+              - column:
+                  name: email
+                  value: mike@gmail.com
+              - column:
+                  name: locked
+                  value: false
+              - column:
+                  name: disabled
+                  value: false
+
+        - insert:
+            tableName: user_role
+            columns:
+              - column:
+                  name: username
+                  value: anton
+              - column:
+                  name: role_id
+                  value: 1
+
+        - insert:
+            tableName: user_role
+            columns:
+              - column:
+                  name: username
+                  value: mike
+              - column:
+                  name: role_id
+                  value: 2

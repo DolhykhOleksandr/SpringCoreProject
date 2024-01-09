@@ -1,0 +1,190 @@
+databaseChangeLog:
+  - changeSet:
+      id: create-security-tables
+      author: Oleksandr
+      changes:
+        - createTable:
+            tableName: user_t
+            columns:
+              - column:
+                  name: username
+                  type: varchar(64)
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: password
+                  type: varchar(64)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: first_name
+                  type: varchar(64)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: last_name
+                  type: varchar(64)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: email
+                  type: varchar(64)
+                  constraints:
+                    nullable: false
+                    unique: true
+              - column:
+                  name: locked
+                  type: boolean
+                  constraints:
+                    nullable: false
+              - column:
+                  name: disabled
+                  type: boolean
+                  constraints:
+                    nullable: false
+
+        - createTable:
+            tableName: role
+            columns:
+              - column:
+                  name: role_id
+                  type: bigint
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: role_name
+                  type: varchar(64)
+                  constraints:
+                    nullable: false
+                    unique: true
+
+        - createTable:
+            tableName: user_role
+            columns:
+              - column:
+                  name: username
+                  type: varchar(64)
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: role_id
+                  type: bigint
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+
+        - createTable:
+            tableName: permission
+            columns:
+              - column:
+                  name: permission_id
+                  type: bigint
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: permission_name
+                  type: varchar(64)
+                  constraints:
+                    nullable: false
+                    unique: true
+
+        - createTable:
+            tableName: role_permission
+            columns:
+              - column:
+                  name: role_id
+                  type: bigint
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: permission_id
+                  type: bigint
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+
+        - createTable:
+            tableName: confirmation_token
+            columns:
+              - column:
+                  name: confirmation_token_id
+                  type: bigint
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: token
+                  type: varchar(64)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: created_at
+                  type: datetime
+              - column:
+                  name: expires_at
+                  type: datetime
+              - column:
+                  name: confirmed_at
+                  type: datetime
+              - column:
+                  name: username
+                  type: varchar(64)
+                  constraints:
+                    nullable: false
+                    unique: true
+
+        - addForeignKeyConstraint:
+            baseColumnNames: username
+            baseTableName: user_role
+            constraintName: fk_ur_user
+            onDelete: CASCADE
+            onUpdate: RESTRICT
+            referencedColumnNames: username
+            referencedTableName: user_t
+            validate: true
+
+        - addForeignKeyConstraint:
+            baseColumnNames: role_id
+            baseTableName: user_role
+            constraintName: fk_ur_role
+            onDelete: CASCADE
+            onUpdate: RESTRICT
+            referencedColumnNames: role_id
+            referencedTableName: role
+            validate: true
+
+        - addForeignKeyConstraint:
+            baseColumnNames: username
+            baseTableName: confirmation_token
+            constraintName: fk_ct_user
+            onDelete: CASCADE
+            onUpdate: RESTRICT
+            referencedColumnNames: username
+            referencedTableName: user_t
+            validate: true
+
+        - addForeignKeyConstraint:
+            baseColumnNames: role_id
+            baseTableName: role_permission
+            constraintName: fk_rp_role
+            onDelete: CASCADE
+            onUpdate: RESTRICT
+            referencedColumnNames: role_id
+            referencedTableName: role
+            validate: true
+
+        - addForeignKeyConstraint:
+            baseColumnNames: permission_id
+            baseTableName: role_permission
+            constraintName: fk_rp_permission
+            onDelete: CASCADE
+            onUpdate: RESTRICT
+            referencedColumnNames: permission_id
+            referencedTableName: permission
+            validate: true

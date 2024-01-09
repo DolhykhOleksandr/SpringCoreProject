@@ -1,7 +1,6 @@
 package com.example.springcoredemo.repository;
 
 
-
 import com.example.springcoredemo.entity.ConfirmationToken;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
@@ -22,7 +21,7 @@ public interface ConfirmationTokenRepository extends JpaRepository<ConfirmationT
     @Query("UPDATE ConfirmationToken t " +
             "SET t.confirmedAt = :confirmedAt\n" +
             "WHERE t.token = :token")
-    boolean updateConfirmedAt(@Param("token") String token,
-                              @Param("confirmedAt") LocalDateTime confirmedAt);
+    void updateConfirmedAt(@Param("token") String token,
+                           @Param("confirmedAt") LocalDateTime confirmedAt);
 
 }

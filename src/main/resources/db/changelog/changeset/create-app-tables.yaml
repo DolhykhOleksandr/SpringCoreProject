@@ -1,0 +1,82 @@
+databaseChangeLog:
+  - changeSet:
+      id: create-app-tables
+      author: Oleksandr
+      changes:
+        - createTable:
+            tableName: product
+            columns:
+              - column:
+                  name: product_id
+                  type: bigint
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: name
+                  type: varchar(64)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: cost
+                  type: double
+                  constraints:
+                    nullable: false
+
+        - createTable:
+            tableName: order_t
+            columns:
+              - column:
+                  name: order_id
+                  type: bigint
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: date
+                  type: date
+                  constraints:
+                    nullable: false
+              - column:
+                  name: cost
+                  type: double
+                  constraints:
+                    nullable: false
+
+        - createTable:
+            tableName: order_product
+            columns:
+              - column:
+                  name: order_id
+                  type: bigint
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: product_id
+                  type: bigint
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+
+        - addForeignKeyConstraint:
+            baseColumnNames: order_id
+            baseTableName: order_product
+            constraintName: fk_op_order
+            onDelete: CASCADE
+            onUpdate: RESTRICT
+            referencedColumnNames: order_id
+            referencedTableName: order_t
+            validate: true
+
+        - addForeignKeyConstraint:
+            baseColumnNames: product_id
+            baseTableName: order_product
+            constraintName: fk_op_product
+            onDelete: CASCADE
+            onUpdate: RESTRICT
+            referencedColumnNames: product_id
+            referencedTableName: product
+            validate: true

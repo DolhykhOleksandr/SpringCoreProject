@@ -1,11 +1,11 @@
 spring:
   profiles:
-    active: dev
+    active: prod
   mail:
     host: localhost
     port: 1025
-    username: visitor
-    password: visitor
+    username: hello
+    password: hello
     properties:
       mail:
         smtp:

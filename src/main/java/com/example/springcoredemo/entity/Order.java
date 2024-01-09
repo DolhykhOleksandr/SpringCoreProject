@@ -15,25 +15,16 @@ import java.util.List;
 @NoArgsConstructor
 @Builder
 @Entity
-@Table(name = "order_table")
+@Table(name = "order_t")
 public class Order {
 
-    @SequenceGenerator(
-            name = "order_seq",
-            sequenceName = "order_seq",
-            allocationSize = 1
-    )
     @Id
-    @GeneratedValue(
-            strategy = GenerationType.SEQUENCE,
-            generator = "order_seq"
-    )
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "order_id")
     private Integer orderId;
 
     @Column(name = "date")
     private LocalDate date;
-
     @Column(name = "cost")
     private Double cost;
     @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
