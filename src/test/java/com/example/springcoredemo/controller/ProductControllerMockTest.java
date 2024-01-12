@@ -21,6 +21,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import java.util.List;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
@@ -81,7 +82,8 @@ class ProductControllerMockTest {
     void save() throws Exception {
         mockMvc.perform(post("/api/v1/products")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(Util.asJsonString(ProductConverter.productToProductDTO(products.get(0)))));
+                .content(Util.asJsonString(ProductConverter.productToProductDTO(products.get(0)))))
+                .andExpect(status().is4xxClientError());
 
     }
 
@@ -93,14 +95,15 @@ class ProductControllerMockTest {
 
         mockMvc.perform(put("/api/v1/products")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(Util.asJsonString(productDTO)));
+                .content(Util.asJsonString(productDTO)))
+                .andExpect(status().is4xxClientError());
     }
 
     @Test
     void deleteProduct() throws Exception {
         Product product = productRepository.save(products.get(0));
 
-        mockMvc.perform(delete("/api/v1/products/" + product.getProductId()));
-
+        mockMvc.perform(delete("/api/v1/products/" + product.getProductId()))
+        .andExpect(status().is4xxClientError());
     }
 }
