@@ -24,6 +24,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @ActiveProfiles("prod")
 class RegistrationControllerTest {
 
+    //Todo docker run -p 1025:1025 maildev/maildev(required to pass the test)
+
     @Value(value = "${local.server.port}")
     private int port;
     @Autowired
