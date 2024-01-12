@@ -1,14 +1,14 @@
-#for Liquibase
+#for Liquibase,Hibernate
 spring:
   liquibase:
-    enabled: true
+    enabled: false
   datasource:
     url: jdbc:postgresql://localhost:5432/postgres
     username: postgres
     password: postgres
   jpa:
     hibernate:
-      ddl-auto: none
+      ddl-auto: create-drop
     properties:
       hibernate:
         dialect: org.hibernate.dialect.PostgreSQLDialect

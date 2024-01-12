@@ -1,6 +1,6 @@
 spring:
   profiles:
-    active: prod1
+    active: prod
   mail:
     host: localhost
     port: 1025

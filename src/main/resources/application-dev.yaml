@@ -1,4 +1,4 @@
-#for Liquibase
+#for Liquibase,Hibernate
 spring:
   liquibase:
     enabled: true
@@ -7,6 +7,10 @@ spring:
     driver-class-name: org.h2.Driver
     username: nk
     password: nk
+  h2:
+    console:
+      enabled: true
+      path: /h2-console
   jpa:
     hibernate:
       ddl-auto: none
@@ -15,8 +19,5 @@ spring:
         dialect: org.hibernate.dialect.H2Dialect
         format_sql: true
     show-sql: true
-  h2:
-    console:
-      enabled: true
-      path: /h2-console
+
 
