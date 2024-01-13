@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Product List</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #333; /* Dark background color */
+            color: #fff;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+        }
+
+        h1 {
+            color: #ff8c00; /* Orange color for the heading */
+        }
+
+        table {
+            width: 80%;
+            border-collapse: collapse;
+            margin-top: 20px;
+            background-color: #ff8c00; /* Orange color for the table */
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        th, td {
+            border: 1px solid #ddd;
+            padding: 12px;
+            text-align: left;
+            color: #333; /* Dark text color for better visibility on the orange background */
+        }
+
+        th {
+            background-color: #333; /* Dark background color for table headers */
+            color: #fff;
+        }
+
+        tr:nth-child(even) {
+            background-color: #ffdbac; /* Lighter shade of orange for even rows */
+        }
+    </style>
+</head>
+<body>
+
+<h1>Product List</h1>
+
+<table id="ProductListTable">
+    <thead>
+    <tr>
+        <th>ID</th>
+        <th>Name</th>
+        <th>Cost</th>
+    </tr>
+    </thead>
+    <tbody></tbody>
+</table>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        // Fetch products from the API
+        fetch('http://localhost:8080/api/v1/products')
+            .then(response => response.json())
+            .then(products => {
+                // Update the HTML table with the product data
+                const productTableBody = document.querySelector('#ProductListTable tbody');
+                products.forEach(product => {
+                    const row = productTableBody.insertRow();
+                    row.insertCell(0).textContent = product.id;
+                    row.insertCell(1).textContent = product.name;
+                    row.insertCell(2).textContent = product.cost;
+                });
+            })
+            .catch(error => console.error('Error fetching data:', error));
+    });
+</script>
+
+</body>
+</html>
