@@ -59,7 +59,7 @@ class ProductControllerMockTest {
                 "http://localhost:" + port + "/api/v1/products/" + productExpected.getProductId(),
                 ProductDTO.class);
 
-        Assertions.assertEquals(productDTOActual, null);
+        Assertions.assertEquals(null, productDTOActual);
     }
 
     @Test
@@ -75,14 +75,14 @@ class ProductControllerMockTest {
         );
 
         for (int i = 0; i < products.size(); i++)
-            Assertions.assertEquals(productDTOSActual, null);
+            Assertions.assertEquals(null, productDTOSActual);
     }
 
     @Test
     void save() throws Exception {
         mockMvc.perform(post("/api/v1/products")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(Util.asJsonString(ProductConverter.productToProductDTO(products.get(0)))))
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(Util.asJsonString(ProductConverter.productToProductDTO(products.get(0)))))
                 .andExpect(status().is4xxClientError());
 
     }
@@ -94,8 +94,8 @@ class ProductControllerMockTest {
         productDTO.setName("Potato free");
 
         mockMvc.perform(put("/api/v1/products")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(Util.asJsonString(productDTO)))
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(Util.asJsonString(productDTO)))
                 .andExpect(status().is4xxClientError());
     }
 
@@ -104,6 +104,6 @@ class ProductControllerMockTest {
         Product product = productRepository.save(products.get(0));
 
         mockMvc.perform(delete("/api/v1/products/" + product.getProductId()))
-        .andExpect(status().is4xxClientError());
+                .andExpect(status().is4xxClientError());
     }
 }
