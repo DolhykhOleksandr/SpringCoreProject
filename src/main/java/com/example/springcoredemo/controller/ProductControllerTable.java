@@ -25,7 +25,7 @@ public class ProductControllerTable {
     @CrossOrigin("*")
     @GetMapping("/save")
     public @ResponseBody String save() throws IOException {
-        return new String(resourceLoader.getResource("classpath:/static/save.html")
+        return new String(resourceLoader.getResource("classpath:/static/save-product.html")
                 .getInputStream().readAllBytes(), StandardCharsets.UTF_8);
     }
 }

@@ -2,7 +2,6 @@ package com.example.springcoredemo.controller.exception;
 
 
 import org.springframework.context.annotation.Profile;
-import org.springframework.dao.DataAccessException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -21,12 +20,4 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
         return handleExceptionInternal(ex, ex.getMessage(),
                 new HttpHeaders(), HttpStatus.BAD_REQUEST, request);
     }
-//
-//    @ExceptionHandler({DataAccessException.class })
-//    protected ResponseEntity<Object> handleDataAccess(
-//            Exception ex, WebRequest request) {
-//        return handleExceptionInternal(ex, "Make sure all data is spelled correctly",
-//                new HttpHeaders(), HttpStatus.BAD_REQUEST, request);
-//    }
-
 }
