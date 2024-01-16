@@ -1,12 +1,12 @@
 package com.example.springcoredemo.entity;
 
-import com.google.common.base.Objects;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.Objects;
 import java.util.Set;
 
 @Data
@@ -40,11 +40,11 @@ public class Permission {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Permission that = (Permission) o;
-        return Objects.equal(permissionId, that.permissionId) && Objects.equal(permissionName, that.permissionName);
+        return Objects.equals(permissionId, that.permissionId) && Objects.equals(permissionName, that.permissionName);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hashCode(permissionId, permissionName);
+        return Objects.hash(permissionId, permissionName);
     }
 }

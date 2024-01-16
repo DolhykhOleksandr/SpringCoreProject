@@ -1,13 +1,13 @@
 package com.example.springcoredemo.entity;
 
 
-import com.google.common.base.Objects;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.Objects;
 import java.util.Set;
 
 @AllArgsConstructor
@@ -60,11 +60,11 @@ public class User {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         User user = (User) o;
-        return locked == user.locked && disabled == user.disabled && Objects.equal(username, user.username) && Objects.equal(password, user.password) && Objects.equal(firstName, user.firstName) && Objects.equal(lastName, user.lastName) && Objects.equal(email, user.email);
+        return locked == user.locked && disabled == user.disabled && Objects.equals(username, user.username) && Objects.equals(password, user.password) && Objects.equals(firstName, user.firstName) && Objects.equals(lastName, user.lastName) && Objects.equals(email, user.email);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hashCode(username, password, firstName, lastName, email, locked, disabled);
+        return Objects.hash(username, password, firstName, lastName, email, locked, disabled);
     }
 }

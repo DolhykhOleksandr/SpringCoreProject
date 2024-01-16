@@ -28,11 +28,10 @@ directory, contingent on the chosen profile.
 ## Workflow
 
 1. Create database in PostgresSQL DBMS
-2. Add and run the MailDev in Docker ($ docker run -p 1080:1080 -p 1025:1025 maildev/maildev)
-3. Open the project in IDE
-4. Change username and password in application-prod.yaml(PostgresSQL) or use application-dev.yaml(h2-console)
-5. Run project
-6. After the registration go to localhost:1080 and confirm the email
+2. Change username and password in application-prod.yaml(PostgresSQL) or use application-dev.yaml(h2-console)
+3. Add and run the MailDev in Docker ($ docker run -p 1080:1080 -p 1025:1025 maildev/maildev) ou use my shell script.
+4. Run project
+5. After the registration go to localhost:1080 and confirm the email
 
 ```shell script
 docker run -p 1080:1080 -p 1025:1025 maildev/maildev
@@ -49,18 +48,18 @@ docker run -p 1080:1080 -p 1025:1025 maildev/maildev
     - Mail
     - Test
 * Hibernate
-* PostgreSQL
 * Liquibase
+* PostgreSQL
 * H2DB
+* Thymeleaf
+* HTML
+* JavaScript
+* CSS
 * Lombok
 * Log4j
 * Jackson
-* Guava
 * GIT
-* HTML
 * REST
-* Thymeleaf
 * JUnit, Mockito
 * MailDev
-* JavaScript
-* CSS
+

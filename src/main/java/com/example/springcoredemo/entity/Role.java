@@ -1,12 +1,12 @@
 package com.example.springcoredemo.entity;
 
-import com.google.common.base.Objects;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.Objects;
 import java.util.Set;
 
 @Data
@@ -47,11 +47,11 @@ public class Role {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Role role = (Role) o;
-        return Objects.equal(roleId, role.roleId) && Objects.equal(roleName, role.roleName);
+        return Objects.equals(roleId, role.roleId) && Objects.equals(roleName, role.roleName);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hashCode(roleId, roleName, users);
+        return Objects.hash(roleId, roleName, users);
     }
 }
