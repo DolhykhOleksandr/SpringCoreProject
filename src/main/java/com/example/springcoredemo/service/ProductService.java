@@ -5,14 +5,13 @@ import com.example.springcoredemo.converter.ProductConverter;
 import com.example.springcoredemo.model.ProductDTO;
 import com.example.springcoredemo.repository.ProductRepository;
 import org.springframework.stereotype.Service;
-import org.apache.log4j.Logger;
+
 
 import java.util.ArrayList;
 import java.util.List;
 
 @Service
 public class ProductService {
-    private final static Logger logger = Logger.getLogger(ProductService.class);
 
     private final ProductRepository productRepository;
 
