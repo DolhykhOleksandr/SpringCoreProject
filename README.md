@@ -4,16 +4,18 @@ This project springCoreDemo as an educational endeavor focusing on the practice 
 objectives include user registration, email confirmation via token, and displaying all users post sign-in.
 
 JPA Repository is primarily utilized for database interaction, with specific interfaces extending it. Some methods
-involve HQL queries. The services handle messaging, user registration, and token confirmation (with a time limit for
-validity). Logging is incorporated for debugging, and log information is stored in a designated file. Services work with
-entities, and controllers handle models, necessitating entity-to-DTO conversion before sending information to
-controllers.
+involve JPQL queries. The services provide opportunities for sending messages to users, to register and search the
+users, to confirm the tokens (at the same time, it's worth noting, if user didn't pass the confirmation in within a
+certain number of minutes - the token becomes invalid). In order to debug the code was added the logging and all log's
+information will be saved in a specific file. The services are working with entities, the controllers - with models,
+that's why before sending information to the controllers, entites are converted to DTO.
 
 Web controllers facilitate navigation between pages, perform checks, and forward information to services for processing.
 Access to these controllers occurs via URL using REST-style, enhancing readability. REST controllers provide app
 functionality to other developers.
 
-HTML documents display information to users, with Thymeleaf used for dynamic pages. Spring Security, along with BCrypt
+HTML documents display information to users, with Thymeleaf used for dynamic pages,JS and CSS with HTML are used to
+display pages. Spring Security, along with BCrypt
 encryption, ensures secure access, and Liquibase is employed for DDL and DML queries.
 
 The application features comprehensive unit and integration test coverage. Profiles differentiate between H2DB (used in
@@ -47,7 +49,7 @@ docker run -p 1080:1080 -p 1025:1025 maildev/maildev
     - Mail
     - Test
 * Hibernate
-* PostgresSQL
+* PostgreSQL
 * Liquibase
 * H2DB
 * Lombok
