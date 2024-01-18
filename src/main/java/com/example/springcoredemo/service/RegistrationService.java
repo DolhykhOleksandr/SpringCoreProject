@@ -5,6 +5,7 @@ import com.example.springcoredemo.entity.ConfirmationToken;
 import com.example.springcoredemo.entity.User;
 import com.example.springcoredemo.model.UserDTO;
 import lombok.AllArgsConstructor;
+
 import org.apache.log4j.Logger;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -16,7 +17,7 @@ import java.util.UUID;
 @AllArgsConstructor
 public class RegistrationService {
 
-    private final static Logger LOGGER = Logger.getLogger(EmailService.class);
+    private static final Logger LOGGER = Logger.getLogger(RegistrationService.class);
     private final ConfirmationTokenService confirmationTokenService;
     private final EmailService emailService;
     private final UserService userService;

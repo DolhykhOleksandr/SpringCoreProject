@@ -3,6 +3,7 @@ package com.example.springcoredemo.service;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
 import lombok.AllArgsConstructor;
+
 import org.apache.log4j.Logger;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
@@ -12,7 +13,7 @@ import org.springframework.stereotype.Service;
 @Service
 @AllArgsConstructor
 public class EmailService {
-    private final static Logger LOGGER = Logger.getLogger(EmailService.class);
+    private static final Logger LOGGER = Logger.getLogger(EmailService.class);
 
     private final JavaMailSender mailSender;
 

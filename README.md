@@ -1,37 +1,40 @@
 # SpringApplication
 
-This project springCoreDemo as an educational endeavor focusing on the practice of various technologies. The main
-objectives include user registration, email confirmation via token, and displaying all users post sign-in.
+This SpringCoreProject is an educational project. The main
+objectives include user registration, sending a token to the mail to confirm the email, display all users after sign in.
 
-JPA Repository is primarily utilized for database interaction, with specific interfaces extending it. Some methods
+JPA Repository is primarily utilized for database interaction. Some methods
 involve JPQL queries. The services provide opportunities for sending messages to users, to register and search the
 users, to confirm the tokens (at the same time, it's worth noting, if user didn't pass the confirmation in within a
-certain number of minutes - the token becomes invalid). In order to debug the code was added the logging and all log's
-information will be saved in a specific file. The services are working with entities, the controllers - with models,
-that's why before sending information to the controllers, entites are converted to DTO.
+certain number of minutes - the token becomes invalid).
 
-Web controllers facilitate navigation between pages, perform checks, and forward information to services for processing.
-Access to these controllers occurs via URL using REST-style, enhancing readability. REST controllers provide app
-functionality to other developers.
+In order to debug the code was added the logging and all log's
+information will be saved in a file. The services are working with entities, the controllers - with models,
+that's why before sending information to the controllers, entities are converted to DTO.
 
-HTML documents display information to users, with Thymeleaf used for dynamic pages,JS and CSS with HTML are used to
-display pages. Spring Security, along with BCrypt
+Web-controllers navigate between pages, perform checks, and pass information to the services for processing. The access
+to these controllers are passing via url using REST.
+
+HTML documents display information to users: Thymeleaf is used for dynamic pages, JS and CSS with HTML are used for
+displaying the table of our entities. Spring Security, along with BCrypt
 encryption, ensures secure access, and Liquibase is employed for DDL and DML queries.
 
 The application features comprehensive unit and integration test coverage. Profiles differentiate between H2DB (used in
-development and integration tests) and PostgreSQL (used in production). Exception handling for user information is
+development) and PostgreSQL (used in production). Exception handling for user information is
 profile-dependent, based on the selected environment.
 
-Project setup details, such as MailDev, Hibernate, and DBMS, are specified in application*.yml files in the "resources"
-directory, contingent on the chosen profile.
+Project setup details, such as MailDev, Hibernate,Liquibase and DBMS, are specified in application*.yml files in the "
+resources" directory, depending on the selected profile.
 
 ## Workflow
 
-1. Create database in PostgresSQL DBMS
+1. Create database in PostgreSQL DBMS
 2. Change username and password in application-prod.yaml(PostgresSQL) or use application-dev.yaml(h2-console)
 3. Add and run the MailDev in Docker ($ docker run -p 1080:1080 -p 1025:1025 maildev/maildev) ou use my shell script.
 4. Run project
-5. After the registration go to localhost:1080 and confirm the email
+5. After the registration go to localhost:1080 and confirm the email.
+6. Login in.
+7. After authentication in Postman  you get a permit for CRUD requests.
 
 ```shell script
 docker run -p 1080:1080 -p 1025:1025 maildev/maildev
