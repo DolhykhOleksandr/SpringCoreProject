@@ -15,7 +15,7 @@ import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 import static com.example.springcoredemo.security.UserPermission.WRITE;
 import static com.example.springcoredemo.security.UserRole.ADMIN;
-import static com.example.springcoredemo.security.UserRole.ADMINTRAINEE;
+import static com.example.springcoredemo.security.UserRole.MANAGER;
 import static org.springframework.security.config.Customizer.withDefaults;
 
 
@@ -36,7 +36,7 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.DELETE, apiTemplate).hasAuthority(WRITE.getPermission())
                         .requestMatchers(HttpMethod.POST, apiTemplate).hasAuthority(WRITE.getPermission())
                         .requestMatchers(HttpMethod.PUT, apiTemplate).hasAuthority(WRITE.getPermission())
-                        .requestMatchers(HttpMethod.GET, apiTemplate).hasAnyRole(ADMIN.name(), ADMINTRAINEE.name())
+                        .requestMatchers(HttpMethod.GET, apiTemplate).hasAnyRole(ADMIN.name(), MANAGER.name())
                 ).formLogin(
                         form -> form
                                 .loginPage("/login")

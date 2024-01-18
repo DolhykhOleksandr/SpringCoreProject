@@ -41,7 +41,7 @@ databaseChangeLog:
                   value: 2
               - column:
                   name: role_name
-                  value: ADMINTRAINEE
+                  value: MANAGER
 
         - insert:
             tableName: role_permission
