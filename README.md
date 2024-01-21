@@ -59,7 +59,7 @@ docker run -p 1080:1080 -p 1025:1025 maildev/maildev
 * JavaScript
 * CSS
 * Lombok
-* Log4j
+* SLF4J
 * Jackson
 * GIT
 * REST
