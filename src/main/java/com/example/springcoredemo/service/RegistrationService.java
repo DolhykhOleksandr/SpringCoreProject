@@ -6,7 +6,7 @@ import com.example.springcoredemo.entity.User;
 import com.example.springcoredemo.model.UserDTO;
 import lombok.AllArgsConstructor;
 
-import org.apache.log4j.Logger;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -15,9 +15,9 @@ import java.util.UUID;
 
 @Service
 @AllArgsConstructor
+@Slf4j
 public class RegistrationService {
 
-    private static final Logger LOGGER = Logger.getLogger(RegistrationService.class);
     private final ConfirmationTokenService confirmationTokenService;
     private final EmailService emailService;
     private final UserService userService;
@@ -30,7 +30,7 @@ public class RegistrationService {
         emailService.send(
                 user.getEmail(),
                 buildEmail(user.getFirstName(), link));
-        LOGGER.info(String.format("User %s has registered", user.getUsername()));
+        log.info(String.format("User %s has registered", user.getUsername()));
     }
 
     @Transactional
@@ -38,26 +38,26 @@ public class RegistrationService {
         ConfirmationToken confirmationToken = confirmationTokenService
                 .getToken(token)
                 .orElseThrow(() -> {
-                    LOGGER.warn("Token not found");
+                    log.warn("Token not found");
                     throw new IllegalStateException("Token not found");
                 });
 
         if (confirmationToken.getConfirmedAt() != null) {
-            LOGGER.warn(String.format("%s email already confirmed", confirmationToken.getUsername()));
+            log.warn(String.format("%s email already confirmed", confirmationToken.getUsername()));
             throw new IllegalStateException("Email already confirmed");
         }
 
         LocalDateTime expiredAt = confirmationToken.getExpiresAt();
 
         if (expiredAt.isBefore(LocalDateTime.now())) {
-            LOGGER.warn(String.format("%s username token expired", confirmationToken.getUsername()));
+            log.warn(String.format("%s username token expired", confirmationToken.getUsername()));
             throw new IllegalStateException("Token expired");
         }
 
         confirmationTokenService.setConfirmedAt(token);
         userService.enableUser(
                 confirmationToken.getUsername());
-        LOGGER.info(String.format("%s username email confirmed", confirmationToken.getUsername()));
+        log.info(String.format("%s username email confirmed", confirmationToken.getUsername()));
         return "confirmed";
     }
 
@@ -71,7 +71,7 @@ public class RegistrationService {
                 .username(username)
                 .build();
 
-        LOGGER.info(String.format("Token for %s has created", username));
+        log.info(String.format("Token for %s has created", username));
 
         return confirmationToken;
     }
