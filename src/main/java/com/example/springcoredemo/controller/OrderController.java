@@ -35,18 +35,13 @@ public class OrderController {
     }
 
     @PostMapping
-    public ResponseEntity<?> save(@RequestBody OrderDTO orderDTO) {
+    public ResponseEntity<OrderDTO> save(@RequestBody OrderDTO orderDTO) {
         if (Util.anyNull(orderDTO.getDate())) {
             throw new IllegalArgumentException("Can't save order without date");
         }
-
-        Integer orderId = orderDTO.getId();
-
-
-        if (orderId != null && orderRepository.existsById(orderId)) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Order with id " + orderId + " already exists");
+        if (orderDTO.getId() != null) {
+            throw new IllegalArgumentException("Cannot specify id when saving an order.");
         }
-
         OrderDTO savedOrderDTO = orderService.save(orderDTO);
 
 
