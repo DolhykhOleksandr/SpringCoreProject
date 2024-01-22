@@ -1,10 +1,14 @@
 package com.example.springcoredemo.security.config;
 
 
+import com.example.springcoredemo.service.CustomUserDetailsService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
 
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.ProviderManager;
+import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
@@ -23,7 +27,11 @@ import static org.springframework.security.config.Customizer.withDefaults;
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
+    private final CustomUserDetailsService customUserDetailsService;
 
+    public SecurityConfig(CustomUserDetailsService customUserDetailsService) {
+        this.customUserDetailsService = customUserDetailsService;
+    }
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         final String apiTemplate = "/api/**";
@@ -61,4 +69,16 @@ public class SecurityConfig {
         return new BCryptPasswordEncoder(12);
 
     }
+        @Bean
+        public DaoAuthenticationProvider daoAuthenticationProvider() {
+            DaoAuthenticationProvider provider = new DaoAuthenticationProvider();
+            provider.setPasswordEncoder(passwordConfig());
+            provider.setUserDetailsService(customUserDetailsService);
+            return provider;
+        }
+
+        @Bean
+        public AuthenticationManager authenticationManager() {
+            return new ProviderManager(daoAuthenticationProvider());
+        }
 }
