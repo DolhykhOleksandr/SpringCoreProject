@@ -51,13 +51,20 @@ public class OrderService {
     }
 
     public OrderDTO save(OrderDTO orderDTO) {
+
+        List<ProductDTO> productDTOs = orderDTO.getProductDTOS();
+
+        if (productDTOs == null || productDTOs.isEmpty()) {
+            throw new IllegalArgumentException("Order must have at least one product.");
+        }
+
         Order order = OrderConverter.orderDTOToOrder(orderDTO);
 
         List<Product> products = orderDTO.getProductDTOS()
                 .stream()
                 .filter(productDTO -> productDTO.getId() != null)
                 .map(productDTO -> productRepository.findById(productDTO.getId())
-                        .orElseThrow(() -> new NoSuchElementException("Product not found with id: " + productDTO.getId())))
+                        .orElseThrow(() -> new EntityNotFoundException("Product not found with id: " + productDTO.getId())))
                 .toList();
 
         order.setCost(calculateAndGetCost(products));
