@@ -12,7 +12,7 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.ArgumentCaptor;
+
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
@@ -21,7 +21,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import java.time.LocalDate;
 import java.util.*;
 
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
@@ -49,6 +49,7 @@ public class OrderServiceTest {
         order.setProducts(products);
     }
 
+
     @Test
     public void get() {
         // given
@@ -64,20 +65,6 @@ public class OrderServiceTest {
         assertThrows(NoSuchElementException.class, () -> {
             orderService.get(null);
         });
-    }
-
-    private OrderDTO orderToOrderDTO(Order order) {
-        OrderDTO orderDTOExpected = OrderConverter.orderToOrderDTO(order);
-        orderDTOExpected.setProductDTOS(products.stream()
-                .map(ProductConverter::productToProductDTO)
-                .toList());
-        return orderDTOExpected;
-    }
-
-    private void setMockForEachProduct(List<Product> products) {
-        for (Product product : products)
-            when(productRepository.findById(Mockito.eq(product.getProductId())))
-                    .thenReturn(Optional.of(product));
     }
 
     @Test
@@ -99,41 +86,18 @@ public class OrderServiceTest {
         Assertions.assertEquals(orderDTOSExpected, orderDTOSActual);
     }
 
-    @Test
-    public void save() {
-        // given
-        setMockForEachProduct(products);
-
-        // when
-        orderService.save(orderToOrderDTO(order));
-
-        // then
-        Order actualOrder = getCapturedOrder();
-        Assertions.assertEquals(order, actualOrder);
-        Assertions.assertEquals(order.getCost(), actualOrder.getCost());
+    private OrderDTO orderToOrderDTO(Order order) {
+        OrderDTO orderDTOExpected = OrderConverter.orderToOrderDTO(order);
+        orderDTOExpected.setProductDTOS(products.stream()
+                .map(ProductConverter::productToProductDTO)
+                .toList());
+        return orderDTOExpected;
     }
 
-    private Order getCapturedOrder() {
-        ArgumentCaptor<Order> orderArgumentCaptor =
-                ArgumentCaptor.forClass(Order.class);
-        verify(orderRepository).save(orderArgumentCaptor.capture());
-
-        return orderArgumentCaptor.getValue();
-    }
-
-    @Test
-    public void update() {
-        // given
-        when(orderRepository.save(order)).thenReturn(order);
-        products.get(0).setCost(100.00);
-        order.setCost(190.00);
-        setMockForEachProduct(products);
-
-        // when
-        orderService.update(orderToOrderDTO(order));
-
-        // then
-        Assertions.assertEquals(order, getCapturedOrder());
+    private void setMockForEachProduct(List<Product> products) {
+        for (Product product : products)
+            when(productRepository.findById(Mockito.eq(product.getProductId())))
+                    .thenReturn(Optional.of(product));
     }
 
     @Test

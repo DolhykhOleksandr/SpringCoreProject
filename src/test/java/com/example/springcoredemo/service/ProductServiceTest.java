@@ -5,10 +5,11 @@ import com.example.springcoredemo.converter.ProductConverter;
 import com.example.springcoredemo.entity.Product;
 import com.example.springcoredemo.model.ProductDTO;
 import com.example.springcoredemo.repository.ProductRepository;
-import org.junit.jupiter.api.Assertions;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+
 import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
@@ -20,7 +21,7 @@ import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
@@ -55,7 +56,7 @@ public class ProductServiceTest {
         ProductDTO productDTOActual = productService.get(productId);
 
         // then
-        Assertions.assertEquals(productDTOExpected, productDTOActual);
+        assertEquals(productDTOExpected, productDTOActual);
         assertThrows(NoSuchElementException.class, () -> {
             productService.get(null);
         });
@@ -75,40 +76,56 @@ public class ProductServiceTest {
         List<ProductDTO> productDTOSActual = productService.getAll();
 
         // then
-        Assertions.assertEquals(productDTOSExpected, productDTOSActual);
+        assertEquals(productDTOSExpected, productDTOSActual);
+    }
+    @Test
+    void save() {
+
+        ProductDTO productDTO = new ProductDTO();
+        productDTO.setName("TestProduct");
+        productDTO.setCost(100.0);
+
+        Product savedProductEntity = new Product();
+        savedProductEntity.setProductId(1);
+
+        when(productRepository.save(any())).thenReturn(savedProductEntity);
+
+        productService.save(productDTO);
+
+        assertNotNull(productDTO.getId());
+        assertEquals(savedProductEntity.getProductId(), productDTO.getId());
+
+        ArgumentCaptor<Product> productCaptor = ArgumentCaptor.forClass(Product.class);
+        verify(productRepository).save(productCaptor.capture());
+
+        Product capturedProduct = productCaptor.getValue();
+        assertEquals(productDTO.getName(), capturedProduct.getName());
+        assertEquals(productDTO.getCost(), capturedProduct.getCost());
     }
 
     @Test
-    public void save() {
-        // given
-        // when
-        productService.save(ProductConverter.productToProductDTO(product));
+    void update() {
 
-        // then
-        Assertions.assertEquals(product, getCapturedProduct());
+        ProductDTO productDTO = new ProductDTO();
+        productDTO.setId(1);
+        productDTO.setName("UpdatedProduct");
+        productDTO.setCost(150.0);
+
+        Product existingProductEntity = new Product();
+        existingProductEntity.setProductId(1);
+
+        when(productRepository.findById(1)).thenReturn(Optional.of(existingProductEntity));
+
+
+        productService.update(productDTO);
+
+
+        assertEquals(productDTO.getName(), existingProductEntity.getName());
+        assertEquals(productDTO.getCost(), existingProductEntity.getCost());
+
+        verify(productRepository).save(existingProductEntity);
     }
 
-    @Test
-    public void update() {
-        // given
-        when(productRepository.save(product)).thenReturn(product);
-        product.setName("Big Mac");
-        product.setCost(140.00);
-
-        // when
-        productService.update(ProductConverter.productToProductDTO(product));
-
-        // then
-        Assertions.assertEquals(product, getCapturedProduct());
-    }
-
-    private Product getCapturedProduct() {
-        ArgumentCaptor<Product> productArgumentCaptor =
-                ArgumentCaptor.forClass(Product.class);
-        verify(productRepository).save(productArgumentCaptor.capture());
-
-        return productArgumentCaptor.getValue();
-    }
 
     @Test
     public void delete() {
