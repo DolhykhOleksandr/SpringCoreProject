@@ -1,5 +1,6 @@
 package com.example.springcoredemo.controller;
 
+import com.example.springcoredemo.entity.Product;
 import com.example.springcoredemo.repository.ProductRepository;
 import com.example.springcoredemo.model.ProductDTO;
 import com.example.springcoredemo.service.ProductService;
@@ -35,24 +36,37 @@ public class ProductController {
 
     @PostMapping
     public ResponseEntity<ProductDTO> save(@RequestBody ProductDTO productDTO) {
+
         if (Util.anyNull(productDTO.getName(), productDTO.getCost())) {
             throw new IllegalArgumentException("Can't save null product");
         }
-
         if (productDTO.getId() != null) {
             throw new IllegalArgumentException("Cannot specify id when saving a product.");
         }
-
         productService.save(productDTO);
         return ResponseEntity.status(HttpStatus.CREATED).body(productDTO);
     }
 
-
     @PutMapping
-    public ResponseEntity<ProductDTO> update(@RequestBody ProductDTO productDTO) {
+    public ResponseEntity<Object> update(@RequestBody ProductDTO productDTO) {
+
         if (Util.anyNull(productDTO.getId())) {
-            throw new IllegalArgumentException("Can't update null product");
+            throw new IllegalArgumentException("Product id cannot be null for update");
         }
+        if (Util.anyNull(productDTO.getName(), productDTO.getCost())) {
+            throw new IllegalArgumentException("Can't update product with null values");
+        }
+
+        Product existingProduct = productRepository.findById(productDTO.getId())
+                .orElse(null);
+
+        if (existingProduct == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body("Product not found with id: " + productDTO.getId());
+        }
+
+        existingProduct.setName(productDTO.getName());
+        existingProduct.setCost(productDTO.getCost());
 
         productService.update(productDTO);
 

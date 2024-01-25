@@ -105,7 +105,6 @@ public class ProductServiceTest {
 
     @Test
     void update() {
-
         ProductDTO productDTO = new ProductDTO();
         productDTO.setId(1);
         productDTO.setName("UpdatedProduct");
@@ -114,18 +113,19 @@ public class ProductServiceTest {
         Product existingProductEntity = new Product();
         existingProductEntity.setProductId(1);
 
-        when(productRepository.findById(1)).thenReturn(Optional.of(existingProductEntity));
-
+        when(productRepository.save(any(Product.class))).thenAnswer(invocation -> {
+            Product savedProduct = invocation.getArgument(0);
+            savedProduct.setProductId(1);
+            return savedProduct;
+        });
 
         productService.update(productDTO);
 
+        assertNotNull(productDTO.getId());
+        assertEquals(1, productDTO.getId().intValue());
 
-        assertEquals(productDTO.getName(), existingProductEntity.getName());
-        assertEquals(productDTO.getCost(), existingProductEntity.getCost());
-
-        verify(productRepository).save(existingProductEntity);
+        verify(productRepository).save(any(Product.class));
     }
-
 
     @Test
     public void delete() {

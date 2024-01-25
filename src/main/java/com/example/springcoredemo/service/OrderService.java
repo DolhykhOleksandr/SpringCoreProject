@@ -9,7 +9,6 @@ import com.example.springcoredemo.model.OrderDTO;
 import com.example.springcoredemo.model.ProductDTO;
 import com.example.springcoredemo.repository.OrderRepository;
 import com.example.springcoredemo.repository.ProductRepository;
-import jakarta.persistence.EntityNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
@@ -54,8 +53,8 @@ public class OrderService {
 
         List<ProductDTO> productDTOs = orderDTO.getProductDTOS();
 
-        if (productDTOs == null || productDTOs.isEmpty()) {
-            throw new IllegalArgumentException("Order must have at least one product.");
+        if (productDTOs == null || productDTOs.isEmpty() || productDTOs.stream().allMatch(productDTO -> productDTO.getId() == null)) {
+            throw new IllegalArgumentException("Order must have at least one product with a non-null ID.");
         }
 
         Order order = OrderConverter.orderDTOToOrder(orderDTO);
@@ -64,7 +63,7 @@ public class OrderService {
                 .stream()
                 .filter(productDTO -> productDTO.getId() != null)
                 .map(productDTO -> productRepository.findById(productDTO.getId())
-                        .orElseThrow(() -> new EntityNotFoundException("Product not found with id: " + productDTO.getId())))
+                        .orElseThrow(() -> new IllegalArgumentException("Product not found with id: " + productDTO.getId())))
                 .toList();
 
         order.setCost(calculateAndGetCost(products));
@@ -90,12 +89,9 @@ public class OrderService {
     }
 
     public OrderDTO update(OrderDTO orderDTO) {
-        if (orderDTO.getId() == null) {
-            throw new IllegalArgumentException("Order id cannot be null for update");
-        }
 
         Order existingOrder = orderRepository.findById(orderDTO.getId())
-                .orElseThrow(() -> new EntityNotFoundException("Order not found with id: " + orderDTO.getId()));
+                .orElseThrow(() -> new IllegalArgumentException("Order not found with id: " + orderDTO.getId()));
 
         existingOrder.setDate(orderDTO.getDate());
 
@@ -108,17 +104,12 @@ public class OrderService {
                 Optional<Product> existingProduct = existingProducts.stream()
                         .filter(p -> p.getProductId().equals(productDTO.getId()))
                         .findFirst();
-
-                if (existingProduct.isPresent()) {
-
-                    Product productToUpdate = existingProduct.get();
-                    productToUpdate.setName(productDTO.getName());
-                    productToUpdate.setCost(productDTO.getCost());
-                } else {
-
+                if (existingProduct.isEmpty()) {
                     Product newProduct = productRepository.findById(productDTO.getId())
-                            .orElseThrow(() -> new EntityNotFoundException("Product not found with id: " + productDTO.getId()));
+                            .orElseThrow(() -> new IllegalArgumentException("Product not found with id: " + productDTO.getId()));
                     existingProducts.add(newProduct);
+                } else {
+                    throw new IllegalArgumentException("Product with ID " + productDTO.getId() + "already exist in the order and updated without id,only those that don't exist in the order are updated by id.");
                 }
             }
         }
@@ -132,7 +123,6 @@ public class OrderService {
 
         return getOrderDTOWithProducts(updatedOrder);
     }
-
 
     public void delete(Integer id) {
         orderRepository.deleteById(id);
