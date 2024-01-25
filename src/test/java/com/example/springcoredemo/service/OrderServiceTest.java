@@ -13,6 +13,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 
+import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
@@ -84,6 +85,43 @@ public class OrderServiceTest {
 
         // then
         Assertions.assertEquals(orderDTOSExpected, orderDTOSActual);
+    }
+    @Test
+    public void save() {
+        // given
+        setMockForEachProduct(products);
+        when(orderRepository.save(any(Order.class))).thenReturn(order);
+
+        // when
+        orderService.save(orderToOrderDTO(order));
+
+        // then
+        Order actualOrder = getCapturedOrder();
+        Assertions.assertEquals(order, actualOrder);
+        Assertions.assertEquals(order.getCost(), actualOrder.getCost());
+
+        // Verify that save method on orderRepository was called
+        verify(orderRepository, times(1)).save(any(Order.class));
+
+        }
+    @Test
+    public void update() {
+        // given
+        when(orderRepository.findById(anyInt())).thenReturn(Optional.empty());
+
+        // when, then
+        assertThrows(IllegalArgumentException.class, () -> orderService.update(orderToOrderDTO(order)));
+
+        // then
+        verify(orderRepository, never()).save(any(Order.class));
+    }
+
+    private Order getCapturedOrder() {
+        ArgumentCaptor<Order> orderArgumentCaptor =
+                ArgumentCaptor.forClass(Order.class);
+        verify(orderRepository).save(orderArgumentCaptor.capture());
+
+        return orderArgumentCaptor.getValue();
     }
 
     private OrderDTO orderToOrderDTO(Order order) {
