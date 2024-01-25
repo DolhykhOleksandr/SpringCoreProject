@@ -12,6 +12,7 @@ import com.example.springcoredemo.repository.ProductRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 
 @Service
@@ -96,24 +97,25 @@ public class OrderService {
         existingOrder.setDate(orderDTO.getDate());
 
         List<Product> existingProducts = existingOrder.getProducts();
-
+        List<String> existingProductIds = existingProducts.stream()
+                .map(product -> product.getProductId().toString())
+                .collect(Collectors.toList());
 
         for (ProductDTO productDTO : orderDTO.getProductDTOS()) {
             if (productDTO.getId() != null) {
-
                 Optional<Product> existingProduct = existingProducts.stream()
                         .filter(p -> p.getProductId().equals(productDTO.getId()))
                         .findFirst();
+
                 if (existingProduct.isEmpty()) {
                     Product newProduct = productRepository.findById(productDTO.getId())
                             .orElseThrow(() -> new IllegalArgumentException("Product not found with id: " + productDTO.getId()));
                     existingProducts.add(newProduct);
                 } else {
-                    throw new IllegalArgumentException("Product with ID " + productDTO.getId() + "already exist in the order and updated without id,only those that don't exist in the order are updated by id.");
+                    throw new IllegalArgumentException("Products with IDs " + String.join(", ", existingProductIds) + " already exist in the order and are updated without an ID. Only those that don't exist in the order are updated by ID.");
                 }
             }
         }
-
 
         existingOrder.setCost(calculateAndGetCost(existingProducts));
 
