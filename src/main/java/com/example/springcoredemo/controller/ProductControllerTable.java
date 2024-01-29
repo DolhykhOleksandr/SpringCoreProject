@@ -1,6 +1,5 @@
 package com.example.springcoredemo.controller;
 
-
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.io.ResourceLoader;
 import org.springframework.web.bind.annotation.*;
@@ -17,7 +16,7 @@ public class ProductControllerTable {
 
     @CrossOrigin("*")
     @GetMapping()
-    public @ResponseBody String getEmployeesTable() throws IOException {
+    public @ResponseBody String getProductsTable() throws IOException {
         return new String(resourceLoader.getResource("classpath:/static/product-table.html")
                 .getInputStream().readAllBytes(), StandardCharsets.UTF_8);
     }

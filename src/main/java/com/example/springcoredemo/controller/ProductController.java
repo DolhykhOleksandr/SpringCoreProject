@@ -80,7 +80,7 @@ public class ProductController {
         }
         productService.delete(id);
 
-        return ResponseEntity.ok("Product deleted successfully");
-    }
+        return ResponseEntity.ok("Product with ID " + id + " deleted successfully");
 
+    }
 }

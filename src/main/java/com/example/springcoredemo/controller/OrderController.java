@@ -1,6 +1,5 @@
 package com.example.springcoredemo.controller;
 
-
 import com.example.springcoredemo.model.OrderDTO;
 import com.example.springcoredemo.service.OrderService;
 import com.example.springcoredemo.utils.Util;
@@ -70,6 +69,6 @@ public class OrderController {
 
         orderService.delete(id);
 
-        return ResponseEntity.ok("Order deleted successfully");
+        return ResponseEntity.ok("Order with ID " + id + " deleted successfully");
     }
 }

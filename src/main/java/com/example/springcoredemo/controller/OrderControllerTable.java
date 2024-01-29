@@ -16,7 +16,7 @@ public class OrderControllerTable {
 
     @CrossOrigin("*")
     @GetMapping()
-    public @ResponseBody String getEmployeesTable() throws IOException {
+    public @ResponseBody String getOrdersTable() throws IOException {
         return new String(resourceLoader.getResource("classpath:/static/order-table.html")
                 .getInputStream().readAllBytes(), StandardCharsets.UTF_8);
     }
