@@ -1,22 +1,27 @@
 package com.example.springcoredemo.service;
 
 import com.example.springcoredemo.converter.ProductConverter;
+import com.example.springcoredemo.entity.Order;
 import com.example.springcoredemo.entity.Product;
 import com.example.springcoredemo.model.ProductDTO;
+import com.example.springcoredemo.repository.OrderRepository;
 import com.example.springcoredemo.repository.ProductRepository;
 import org.springframework.stereotype.Service;
 
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class ProductService {
 
     private final ProductRepository productRepository;
+    private final OrderRepository orderRepository;
 
-    public ProductService(ProductRepository productRepository) {
+    public ProductService(ProductRepository productRepository, OrderRepository orderRepository) {
         this.productRepository = productRepository;
+        this.orderRepository = orderRepository;
     }
 
     public ProductDTO get(Integer id) {
@@ -40,9 +45,19 @@ public class ProductService {
         save(productDTO);
     }
 
-    public void delete(Integer id) {
-        productRepository.deleteById(id);
+    public void delete(Integer productId) {
+        Optional<Product> optionalProduct = productRepository.findById(productId);
+
+        optionalProduct.ifPresent(product -> {
+            for (Order order : product.getOrders()) {
+                order.getProducts().remove(product);
+                if (order.getProducts().isEmpty()) {
+                    orderRepository.delete(order);
+                }
+            }
+            productRepository.delete(product);
+        });
     }
-
-
 }
+
+

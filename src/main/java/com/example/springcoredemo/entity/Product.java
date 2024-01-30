@@ -26,6 +26,6 @@ public class Product {
     private String name;
     @Column(name = "cost")
     private Double cost;
-    @ManyToMany(mappedBy = "products", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @ManyToMany(mappedBy = "products", fetch = FetchType.LAZY)
     private List<Order> orders;
 }

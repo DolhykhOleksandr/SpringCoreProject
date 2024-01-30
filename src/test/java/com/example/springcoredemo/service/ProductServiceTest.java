@@ -2,8 +2,10 @@ package com.example.springcoredemo.service;
 
 
 import com.example.springcoredemo.converter.ProductConverter;
+import com.example.springcoredemo.entity.Order;
 import com.example.springcoredemo.entity.Product;
 import com.example.springcoredemo.model.ProductDTO;
+import com.example.springcoredemo.repository.OrderRepository;
 import com.example.springcoredemo.repository.ProductRepository;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -33,10 +35,12 @@ public class ProductServiceTest {
     private ProductService productService;
     private Product product;
     private Integer productId;
+    @Mock
+    private OrderRepository orderRepository;
 
     @BeforeEach
     void setUp() {
-        productService = new ProductService(productRepository);
+        productService = new ProductService(productRepository, orderRepository);
         productId = 1;
         product = Product.builder()
                 .productId(productId)
@@ -78,6 +82,7 @@ public class ProductServiceTest {
         // then
         assertEquals(productDTOSExpected, productDTOSActual);
     }
+
     @Test
     void save() {
 
@@ -129,14 +134,16 @@ public class ProductServiceTest {
 
     @Test
     public void delete() {
-        // given - precondition or setup
-        doNothing().when(productRepository).deleteById(productId);
+        Product product = new Product();
+        product.setProductId(1);
+        product.setOrders(new ArrayList<>());
 
-        // when -  action or the behaviour that we are going test
-        productService.delete(productId);
+        when(productRepository.findById(1)).thenReturn(Optional.of(product));
 
-        // then - verify the output
-        verify(productRepository, times(1)).deleteById(productId);
+        productService.delete(1);
+
+        verify(productRepository, times(1)).delete(product);
+
+        verify(orderRepository, never()).delete(any());
     }
-
 }
