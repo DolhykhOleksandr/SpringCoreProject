@@ -40,10 +40,9 @@ public class ProductController {
         if (Util.anyNull(productDTO.getName(), productDTO.getCost())) {
             throw new IllegalArgumentException("Can't save null product");
         }
-        if (productDTO.getId() != null) {
-            throw new IllegalArgumentException("Cannot specify id when saving a product.");
-        }
+
         productService.save(productDTO);
+
         return ResponseEntity.status(HttpStatus.CREATED).body(productDTO);
     }
 

@@ -38,11 +38,8 @@ public class OrderController {
         if (Util.anyNull(orderDTO.getDate())) {
             throw new IllegalArgumentException("Can't save order without date");
         }
-        if (orderDTO.getId() != null) {
-            throw new IllegalArgumentException("Cannot specify id when saving an order.");
-        }
-        OrderDTO savedOrderDTO = orderService.save(orderDTO);
 
+        OrderDTO savedOrderDTO = orderService.save(orderDTO);
 
         return ResponseEntity.status(HttpStatus.CREATED).body(savedOrderDTO);
     }

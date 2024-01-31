@@ -2,7 +2,6 @@ package com.example.springcoredemo.service;
 
 
 import com.example.springcoredemo.converter.ProductConverter;
-import com.example.springcoredemo.entity.Order;
 import com.example.springcoredemo.entity.Product;
 import com.example.springcoredemo.model.ProductDTO;
 import com.example.springcoredemo.repository.OrderRepository;
