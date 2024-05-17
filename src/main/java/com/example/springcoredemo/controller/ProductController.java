@@ -5,13 +5,15 @@ import com.example.springcoredemo.repository.ProductRepository;
 import com.example.springcoredemo.model.ProductDTO;
 import com.example.springcoredemo.service.ProductService;
 import com.example.springcoredemo.utils.Util;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-
+@Api(tags = "Product")
 @RestController
 @RequestMapping("api/v1/products")
 public class ProductController {
@@ -24,16 +26,19 @@ public class ProductController {
         this.productRepository = productRepository;
     }
 
+    @ApiOperation("Get product by ID")
     @GetMapping("/{id}")
     public ProductDTO get(@PathVariable Integer id) {
         return productService.get(id);
     }
 
+    @ApiOperation("Get all products")
     @GetMapping
     public List<ProductDTO> getAll() {
         return productService.getAll();
     }
 
+    @ApiOperation("Create a new product")
     @PostMapping
     public ResponseEntity<ProductDTO> save(@RequestBody ProductDTO productDTO) {
 
@@ -46,6 +51,7 @@ public class ProductController {
         return ResponseEntity.status(HttpStatus.CREATED).body(productDTO);
     }
 
+    @ApiOperation("Update an existing product")
     @PutMapping
     public ResponseEntity<Object> update(@RequestBody ProductDTO productDTO) {
 
@@ -72,6 +78,7 @@ public class ProductController {
         return ResponseEntity.ok(productDTO);
     }
 
+    @ApiOperation("Delete a product")
     @DeleteMapping("/{id}")
     public ResponseEntity<String> delete(@PathVariable Integer id) {
         if (!productRepository.existsById(id)) {
